@@ -1,0 +1,59 @@
+{
+  "name": "@boundfox-studios/discord-bot",
+  "author": {
+    "email": "manuel.rauber@boundfoxstudios.com",
+    "name": "Manuel Rauber",
+    "url": "https://boundfoxstudios.com"
+  },
+  "license": "MIT",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "DEBUG=bot:* nodemon --exec ts-node ./src/index.ts",
+    "lint": "eslint \"src/**\"",
+    "release": "npm run release:preclean && npm run release:build && npm run release:copy-additional-files && npm run release:rename && npm run release:zip && npm run release:postclean",
+    "release:preclean": "rm -rf dist && rm -rf bfs-bot && rm -f release-*.zip",
+    "release:postclean": "rm -rf dist && rm -rf bfs-bot",
+    "release:build": "npm run lint && tsc",
+    "release:copy-additional-files": "cp package.json dist && cp package-lock.json dist && cp LICENSE dist && cp README.md dist && cp server.sh dist && cp src/commands.config.json dist",
+    "release:rename": "mv dist bfs-bot",
+    "release:zip": "zip -r release-$npm_package_version.zip bfs-bot"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/luxon": "^1.21.0",
+    "@types/needle": "^2.0.4",
+    "@types/node": "^13.9.1",
+    "@types/qs": "^6.9.1",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "eslint": "~6.8.0",
+    "eslint-plugin-import": "~2.20.1",
+    "eslint-plugin-jsdoc": "~22.0.0",
+    "eslint-plugin-prefer-arrow": "~1.1.7",
+    "husky": "~4.2.3",
+    "nodemon": "~2.0.2",
+    "prettier": "~1.19.1",
+    "pretty-quick": "~2.0.1",
+    "ts-node": "~8.6.2",
+    "typescript": "~3.8.3"
+  },
+  "dependencies": {
+    "backoff-rxjs": "^6.3.3",
+    "debug": "~4.1.1",
+    "del": "^5.1.0",
+    "discord.js": "~12.0.2",
+    "dotenv": "^8.2.0",
+    "inversify": "~5.0.1",
+    "luxon": "^1.22.0",
+    "needle": "^2.3.3",
+    "qs": "^6.9.1",
+    "reflect-metadata": "~0.1.13",
+    "rxjs": "^6.5.4",
+    "tempy": "^0.5.0"
+  }
+}

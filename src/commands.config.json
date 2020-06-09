@@ -1,0 +1,8 @@
+{
+  "ImageUploadCommand": {
+    "allowedChannelNames": ["upload-test"],
+    "channelNameToPiwigoId": {
+      "upload-test": 3
+    }
+  }
+}
