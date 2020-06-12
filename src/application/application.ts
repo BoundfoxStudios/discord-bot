@@ -1,6 +1,7 @@
 import { ApiArea } from '../api/area.ts';
 import { App, container, instanceCachingFactory } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
+import { AlosaurDebugAdapter } from './alosaur-debug-adapter.ts';
 import { Configuration, ConfigurationProvider } from './configuration.provider.ts';
 import { DiTokens } from './di-tokens.ts';
 
@@ -11,6 +12,8 @@ export class Application {
 
   async initialize(): Promise<void> {
     this.initializeDependencyInjection();
+
+    await AlosaurDebugAdapter.apply();
 
     this.app = new App({ areas: [ApiArea], logging: true });
   }
