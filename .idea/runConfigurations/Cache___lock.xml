@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Cache &amp; lock" type="DenoConfigurationType" inputPath="src/deps.ts" programParameters="cache --lock-write --lock lock.json">
-    <method v="2" />
-  </configuration>
-</component>
