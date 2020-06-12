@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Start development server" type="DenoConfigurationType" inputPath="src/index.ts" programParameters="run --config tsconfig.json --lock lock.json --cached-only">
+  <configuration default="false" name="Start development server" type="DenoConfigurationType" inputPath="src/index.ts" programParameters="run --allow-env --allow-net --allow-read --config tsconfig.json --lock lock.json --cached-only">
+    <option name="envs">
+      <entry key="DEBUG" value="*" />
+    </option>
     <method v="2" />
   </configuration>
 </component>
