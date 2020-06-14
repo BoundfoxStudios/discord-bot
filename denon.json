@@ -1,0 +1,31 @@
+{
+  "$schema": "https://deno.land/x/denon/schema.json",
+  "watch": "false",
+  "watcher": {
+    "match": ["src/*"]
+  },
+  "scripts": {
+    "start": {
+      "cmd": "deno run src/index.ts",
+      "allow": [
+        "env",
+        "net",
+        "read"
+      ],
+      "env": {
+        "DEBUG": "*",
+        "BOT_CONFIG_FILE": "src/configuration.json"
+      },
+      "unstable": true,
+      "desc": "Runs a development server with watch enabled.",
+      "inspect": "127.0.0.1:9229",
+      "tsconfig": "tsconfig.json"
+    },
+    "bundle": {
+      "cmd": "deno bundle src/index.ts bot.js",
+      "unstable": true,
+      "desc": "Bundles the server for deployment.",
+      "tsconfig": "tsconfig.json"
+    }
+  }
+}

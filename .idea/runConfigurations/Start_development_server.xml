@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Start development server" type="DenoConfigurationType" inputPath="src/index.ts" programParameters="run --unstable --allow-env --allow-net --allow-read --config tsconfig.json --lock lock.json --lock-write">
-    <option name="envs">
-      <entry key="BOT_CONFIG_FILE" value="src/configuration.json" />
-      <entry key="DEBUG" value="*" />
-    </option>
-    <method v="2" />
-  </configuration>
-</component>
