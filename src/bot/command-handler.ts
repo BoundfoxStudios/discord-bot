@@ -7,7 +7,7 @@ import { Command } from './commands/command.ts';
 const debug = deriveDebug('Commander');
 
 @Injectable()
-export class Commander {
+export class CommandHandler {
   private readonly commandMap = new Map<string, Command>();
 
   constructor(
@@ -32,6 +32,11 @@ export class Commander {
   }
 
   process(message: Message): void {
+    // Don't process bot messages
+    if (message.author.bot) {
+      return;
+    }
+
     // Sample command: !info test 123
     // Tries to get the command name info, skipping the prefix and reading the command name until the next empty space.
     // Or the rest of the command, if empty space is not found.

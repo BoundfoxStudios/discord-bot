@@ -20,5 +20,13 @@ export {
   Embed_Provider,
   Embed_Author,
   Embed_Field,
+  MessageReactionPayload,
+  Reaction_Payload,
+  cache,
+  addRole,
+  removeRole,
+  Guild,
+  Role,
+  MemberCreatePayload,
 } from 'https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/mod.ts';
 export { parse } from 'https://deno.land/std@0.56.0/flags/mod.ts';

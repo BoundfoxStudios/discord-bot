@@ -11,6 +11,13 @@ export interface Configuration {
 export interface DiscordConfiguration {
   token: string;
   prefix: string;
+  reactions: ReactionConfiguration[];
+}
+
+export interface ReactionConfiguration {
+  messageId: string;
+  roleName: string;
+  emoji: string;
 }
 
 export interface ServerConfiguration {
@@ -73,6 +80,6 @@ export class ConfigurationProvider {
       throw new Error('DISCORD_TOKEN not set.');
     }
 
-    return { token, prefix };
+    return { token, prefix, reactions: this.configurationFile.discord.reactions };
   }
 }

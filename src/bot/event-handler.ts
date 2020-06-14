@@ -1,8 +1,9 @@
 import { Configuration } from '../application/configuration.provider.ts';
 import { DiTokens } from '../application/di-tokens.ts';
-import { EventHandlers, Inject, Injectable, Message } from '../deps.ts';
+import { EventHandlers, Inject, Injectable, Message, MessageReactionPayload, Reaction_Payload } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
-import { Commander } from './commander.ts';
+import { CommandHandler } from './command-handler.ts';
+import { ReactionHandler } from './reaction-handler.ts';
 
 const debug = deriveDebug('EventHandler');
 
@@ -10,21 +11,30 @@ const debug = deriveDebug('EventHandler');
 export class EventHandler implements EventHandlers {
   constructor(
     @Inject(DiTokens.Configuration) private readonly configuration: Configuration,
-    @Inject(Commander) private readonly commander: Commander,
+    @Inject(CommandHandler) private readonly commandHandler: CommandHandler,
+    @Inject(ReactionHandler) private readonly reactionHandler: ReactionHandler,
   ) {
   }
 
-  ready() {
+  ready(): void {
     debug('Ready event received.');
   }
 
-  messageCreate(message: Message) {
+  messageCreate(message: Message): void {
     if (!message.content.startsWith(this.configuration.discord.prefix)) {
       return;
     }
 
     debug('Received a potential message...');
 
-    this.commander.process(message);
+    this.commandHandler.process(message);
+  }
+
+  reactionAdd(message: Message | MessageReactionPayload, emoji: Reaction_Payload, userId: string): void {
+    this.reactionHandler.add(message, emoji, userId);
+  }
+
+  reactionRemove(message: Message | MessageReactionPayload, emoji: Reaction_Payload, userId: string): void {
+    this.reactionHandler.remove(message, emoji, userId);
   }
 }

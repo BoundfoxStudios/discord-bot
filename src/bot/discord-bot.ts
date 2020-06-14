@@ -28,7 +28,7 @@ export class DiscordBot {
 
     await createClient({
       token: this.configuration.discord.token,
-      intents: [Intents.GUILD_MESSAGES, Intents.GUILDS],
+      intents: [Intents.GUILD_MESSAGES, Intents.GUILDS, Intents.GUILD_MESSAGE_REACTIONS],
       eventHandlers: this.eventHandler
     });
   }

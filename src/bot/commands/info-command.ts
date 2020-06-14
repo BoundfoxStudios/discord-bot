@@ -8,12 +8,12 @@ export class InfoCommand implements Command {
 
   async execute(message: Message): Promise<void> {
     const embed = new MessageEmbed()
-      .setUrl('https://gitlab.com/boundfox-studios/discord-bot')
+      .setUrl('https://github.com/boundfoxstudios/discord-bot')
       .setColor('#ffeb3b')
       .setDescription(
         `Hi! I'm the official Boundfox Studios Bot! I'm an open source discord bot. Feel free to take a look at my code. :-)`,
       )
-      .addField('Repository', 'https://gitlab.com/boundfox-studios/discord-bot')
+      .addField('Repository', 'https://github.com/boundfoxstudios/discord-bot')
       .addField('Website', 'https://boundfoxstudios.com')
       .addField('YouTube', 'https://www.youtube.com/c/Boundfox')
       .addField('Twitter', 'https://twitter.com/boundfoxstudios')
