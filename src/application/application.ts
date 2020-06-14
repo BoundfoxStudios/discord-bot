@@ -1,7 +1,8 @@
 import { ApiArea } from '../api/area.ts';
-import { Commander } from '../bot/commander.ts';
+import { CommandHandler } from '../bot/command-handler.ts';
 import { Command } from '../bot/commands/command.ts';
-import { InfoCommand } from '../bot/commands/info.command.ts';
+import { InfoCommand } from '../bot/commands/info-command.ts';
+import { ReactionHandler } from '../bot/reaction-handler.ts';
 import { DiscordBot } from '../bot/discord-bot.ts';
 import { EventHandler } from '../bot/event-handler.ts';
 import { App, container, InjectionToken, instanceCachingFactory } from '../deps.ts';
@@ -35,7 +36,7 @@ export class Application {
   }
 
   private initializeCommander(): void {
-    const commander = container.resolve(Commander);
+    const commander = container.resolve(CommandHandler);
     commander.initialize();
   }
 
@@ -54,7 +55,7 @@ export class Application {
   private initializeDependencyInjection(): void {
     container.registerSingleton(DiscordBot);
     container.registerSingleton(EventHandler);
-    container.registerSingleton(Commander);
+    container.registerSingleton(CommandHandler);
 
     this.registerCommands([InfoCommand]);
 

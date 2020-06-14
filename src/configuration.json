@@ -1,5 +1,22 @@
 {
   "discord": {
-    "prefix": "!"
+    "prefix": "!",
+    "reactions": [
+      {
+        "messageId": "721811447327359026",
+        "roleName": "Rules accepted",
+        "emoji": "✅"
+      },
+      {
+        "messageId": "721820743142473910",
+        "roleName": "Developer",
+        "emoji": "⌨️"
+      },
+      {
+        "messageId": "721820743142473910",
+        "roleName": "Artist",
+        "emoji": "🎨"
+      }
+    ]
   }
 }
