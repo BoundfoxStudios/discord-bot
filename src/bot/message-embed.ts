@@ -100,6 +100,14 @@ export class MessageEmbed implements Exclude<Embed, 'type' | 'timestamp' | 'prov
     return this;
   }
 
+  setUrl(url: string): MessageEmbed {
+    this.validateUrl(url);
+
+    this.url = url;
+
+    return this;
+  }
+
   addField(name: string, value: string, inline: boolean = false): MessageEmbed {
     this.fields.push({ name, value, inline });
 

@@ -1,7 +1,10 @@
 import { ApiArea } from '../api/area.ts';
+import { Commander } from '../bot/commander.ts';
+import { Command } from '../bot/commands/command.ts';
+import { InfoCommand } from '../bot/commands/info.command.ts';
 import { DiscordBot } from '../bot/discord-bot.ts';
 import { EventHandler } from '../bot/event-handler.ts';
-import { App, container, instanceCachingFactory } from '../deps.ts';
+import { App, container, InjectionToken, instanceCachingFactory } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
 import { AlosaurDebugAdapter } from './alosaur-debug-adapter.ts';
 import { Configuration, ConfigurationProvider } from './configuration.provider.ts';
@@ -26,8 +29,14 @@ export class Application {
       return;
     }
 
+    this.initializeCommander();
     await this.startDiscordBot();
     await this.startHttpServer();
+  }
+
+  private initializeCommander(): void {
+    const commander = container.resolve(Commander);
+    commander.initialize();
   }
 
   private async startDiscordBot(): Promise<void> {
@@ -42,9 +51,12 @@ export class Application {
     await this.app!.listen(`:${configuration.server.port}`);
   }
 
-  private initializeDependencyInjection() {
+  private initializeDependencyInjection(): void {
     container.registerSingleton(DiscordBot);
     container.registerSingleton(EventHandler);
+    container.registerSingleton(Commander);
+
+    this.registerCommands([InfoCommand]);
 
     container.registerSingleton(ConfigurationProvider);
 
@@ -55,5 +67,9 @@ export class Application {
         return configurationProvider.current;
       }),
     });
+  }
+
+  private registerCommands(commands: InjectionToken<Command>[]): void {
+    commands.forEach(command => container.registerSingleton(DiTokens.Command, command));
   }
 }

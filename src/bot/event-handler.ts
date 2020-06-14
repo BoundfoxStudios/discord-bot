@@ -1,14 +1,17 @@
 import { Configuration } from '../application/configuration.provider.ts';
 import { DiTokens } from '../application/di-tokens.ts';
-import { EventHandlers, Inject, Injectable, Message, sendMessage } from '../deps.ts';
+import { EventHandlers, Inject, Injectable, Message } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
-import { MessageEmbed } from './message-embed.ts';
+import { Commander } from './commander.ts';
 
 const debug = deriveDebug('EventHandler');
 
 @Injectable()
 export class EventHandler implements EventHandlers {
-  constructor(@Inject(DiTokens.Configuration) private readonly configuration: Configuration) {
+  constructor(
+    @Inject(DiTokens.Configuration) private readonly configuration: Configuration,
+    @Inject(Commander) private readonly commander: Commander,
+  ) {
   }
 
   ready() {
@@ -22,18 +25,6 @@ export class EventHandler implements EventHandlers {
 
     debug('Received a potential message...');
 
-    // message.
-
-    sendMessage(message.channel, 'I am alive!');
-    sendMessage(message.channel, {
-      embed: new MessageEmbed()
-        .setAuthor('Author', 'https://google.de', 'https://boundfoxstudios.com/wp-content/uploads/2020/02/cropped-Logo_New-150x150.png')
-        .setColor('#ffeb3b')
-        .setDescription('Description')
-        .setFooter('Footer', 'https://boundfoxstudios.com/wp-content/uploads/2020/02/cropped-Logo_New-150x150.png')
-        .setTitle('Title')
-        //.setImage('https://boundfoxstudios.com/wp-content/uploads/2020/02/cropped-Logo_New-150x150.png')
-        .setThumbnail('https://boundfoxstudios.com/wp-content/uploads/2020/02/cropped-Logo_New-150x150.png')
-    });
+    this.commander.process(message);
   }
 }
