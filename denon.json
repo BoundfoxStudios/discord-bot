@@ -25,7 +25,8 @@
       "cmd": "deno bundle src/index.ts bot.js",
       "unstable": true,
       "desc": "Bundles the server for deployment.",
-      "tsconfig": "tsconfig.json"
+      "tsconfig": "tsconfig.json",
+      "watch": false
     }
   }
 }
