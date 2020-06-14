@@ -8,6 +8,7 @@ denon bundle
 
 mkdir .deploy
 mv bot.js .deploy
+cp server-configuration/configuration.json .deploy/configuration.json
 
 cd .deploy
 rsync -avzhe ssh --progress --delete ./* $REMOTE_SERVER:~/bot/.deploy
