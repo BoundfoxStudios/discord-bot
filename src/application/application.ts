@@ -32,6 +32,7 @@ export class Application {
 
     this.initializeCommander();
     await this.startDiscordBot();
+
     await this.startHttpServer();
   }
 
@@ -56,6 +57,7 @@ export class Application {
     container.registerSingleton(DiscordBot);
     container.registerSingleton(EventHandler);
     container.registerSingleton(CommandHandler);
+    container.registerSingleton(ReactionHandler);
 
     this.registerCommands([InfoCommand]);
 

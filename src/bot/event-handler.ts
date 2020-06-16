@@ -1,6 +1,6 @@
 import { Configuration } from '../application/configuration.provider.ts';
 import { DiTokens } from '../application/di-tokens.ts';
-import { EventHandlers, Inject, Injectable, Message, MessageReactionPayload, Reaction_Payload } from '../deps.ts';
+import { EventHandlers, Guild, Inject, Injectable, Message, MessageReactionPayload, Reaction_Payload } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
 import { CommandHandler } from './command-handler.ts';
 import { ReactionHandler } from './reaction-handler.ts';
@@ -18,6 +18,12 @@ export class EventHandler implements EventHandlers {
 
   ready(): void {
     debug('Ready event received.');
+  }
+
+  guildCreate(guild: Guild): void {
+    // If the guild was "created" which basically means that the bot got information about the server it has joined,
+    // we can start the reaction sync. Before this event, the cache.channels will not be populated.
+    void this.reactionHandler.syncReactions(guild);
   }
 
   messageCreate(message: Message): void {
