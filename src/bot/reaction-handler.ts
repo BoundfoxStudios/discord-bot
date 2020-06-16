@@ -2,7 +2,7 @@ import { Configuration, ReactionConfiguration } from '../application/configurati
 import { DiTokens } from '../application/di-tokens.ts';
 import {
   addRole,
-  cache,
+  cache, Channel, getChannels,
   getMember,
   getMessage,
   getReactions,
@@ -56,12 +56,12 @@ export class ReactionHandler {
 
     this.syncDone = true;
 
-    debug('Reaction sync started...');
-
     const userCache: { [key: string]: Member } = {};
 
+    debug('Reaction sync started...');
+
     await this.configuration.reduce((configurationPromise, configuration) => configurationPromise
-        .then(() => cache.channels.get(configuration.channelId))
+        .then(() => guild.channels.get(configuration.channelId))
         .then(channel => {
           if (!channel) {
             throw new Error(`Skipping channel ${configuration.channelId}. Channel was not found in cache.`);
@@ -84,6 +84,7 @@ export class ReactionHandler {
                       return addRole(guild, member.user.id, role.id, 'Set via Reaction Sync') as Promise<void>;
                     }
                   })
+                  .then(() => new Promise(resolve => setTimeout(resolve, 1000))) // wait a bit so the request manager does not get overwhelmed
                 , Promise.resolve()))
             , Promise.resolve()))
         .catch((error: Error) => debug(error.message)),
