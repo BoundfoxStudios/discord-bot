@@ -28,5 +28,10 @@ export {
   Guild,
   Role,
   MemberCreatePayload,
+  getMessage,
+  getReactions,
+  UserPayload,
+  Member,
+  getMember,
 } from 'https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/mod.ts';
 export { parse } from 'https://deno.land/std@0.56.0/flags/mod.ts';

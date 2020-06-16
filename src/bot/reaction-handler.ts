@@ -3,14 +3,19 @@ import { DiTokens } from '../application/di-tokens.ts';
 import {
   addRole,
   cache,
+  getMember,
+  getMessage,
+  getReactions,
   Guild,
   Inject,
   Injectable,
+  Member,
   Message,
   MessageReactionPayload,
   Reaction_Payload,
   removeRole,
   Role,
+  UserPayload,
 } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
 import { getRoleByName } from './bot-helper-utils.ts';
@@ -20,35 +25,80 @@ const debug = deriveDebug('RulesCommand');
 @Injectable()
 export class ReactionHandler {
   private readonly configuration: ReactionConfiguration[];
+  private syncDone = false;
 
   constructor(@Inject(DiTokens.Configuration) configuration: Configuration) {
     this.configuration = configuration.discord.reactions;
   }
 
   add(message: Message | MessageReactionPayload, emoji: Reaction_Payload, userId: string): void {
-    this.process(message, (role, guild) => {
-      debug('Adding role %s to user %s.', role.name, userId);
+    this.process(message, (role, guild, member) => {
+      debug('Adding role %s to user %s (%s).', role.name, member.user?.username, member.user?.id || userId);
       addRole(guild, userId, role.id, `Self-assign role by user ${userId}.`);
     });
   }
 
   remove(message: Message | MessageReactionPayload, emoji: Reaction_Payload, userId: string): void {
-    this.process(message, (role, guild) => {
-      debug('Removing role %s to user %s.', role.name, userId);
+    this.process(message, (role, guild, member) => {
+      debug('Removing role %s from user %s (%s).', role.name, member.user?.username, member.user?.id || userId);
       removeRole(guild.id, userId, role.id, `Self-remove role by user ${userId}.`);
     });
   }
 
-  private process(message: Message | MessageReactionPayload, successCallback: (role: Role, guild: Guild) => void) {
-    if (!messageIsMessageReactionPayload(message) || !cache.guilds.has(message.guild_id)) {
-      debug('There was an error setting the role for %o', message);
+  /**
+   * Syncs the reactions to the user, in case the bot was offline.
+   * DOES NOT REMOVE ANY ROLES.
+   */
+  async syncReactions(guild: Guild): Promise<void> {
+    if (this.syncDone) {
       return;
     }
 
-    const configuration = this.getConfigurationForMessage(message.message_id, message.emoji.name!);
+    this.syncDone = true;
 
-    if (!configuration) {
-      debug('No configuration found for %s, message id %s', message.emoji.name!, message.message_id);
+    debug('Reaction sync started...');
+
+    const userCache: { [key: string]: Member } = {};
+
+    await this.configuration.reduce((configurationPromise, configuration) => configurationPromise
+        .then(() => cache.channels.get(configuration.channelId))
+        .then(channel => {
+          if (!channel) {
+            throw new Error(`Skipping channel ${configuration.channelId}. Channel was not found in cache.`);
+          }
+
+          return channel;
+        })
+        .then(channel => getMessage(channel, configuration.messageId))
+        .then(message => message.reactions && message.reactions
+          .filter(reaction => reaction.emoji.name === configuration.emoji)
+          .reduce((reactionPromise, reaction) => reactionPromise
+              .then(() => getReactions(message, reaction.emoji.name!))
+              .then(users => users.reduce((userPromise, userPartial: UserPayload | Member) => userPromise
+                  .then(() => userIsUserPayload(userPartial) ? userPartial.id : userPartial.user.id)
+                  .then(async userId => userCache[userId] || (userCache[userId] = await getMember(guild.id, userId) as Member))
+                  .then(member => ({ member, role: getRoleByName(guild, configuration.roleName)! }))
+                  .then(({ member, role }) => {
+                    if (!member.roles.includes(role.id)) {
+                      debug('Adding role %s to user %s (%s).', role.name, member.user.username, member.user.id);
+                      return addRole(guild, member.user.id, role.id, 'Set via Reaction Sync') as Promise<void>;
+                    }
+                  })
+                , Promise.resolve()))
+            , Promise.resolve()))
+        .catch((error: Error) => debug(error.message)),
+      Promise.resolve());
+
+    debug('Reaction sync done!');
+  }
+
+  private process(message: Message | MessageReactionPayload, successCallback: (role: Role, guild: Guild, member: Member) => void) {
+    let configuration: ReactionConfiguration | undefined;
+
+    if (!messageIsMessageReactionPayload(message)
+      || !cache.guilds.has(message.guild_id)
+      || !(configuration = this.getConfigurationForMessage(message.message_id, message.channel_id, message.emoji.name!))
+    ) {
       return;
     }
 
@@ -60,15 +110,24 @@ export class ReactionHandler {
       return;
     }
 
-    successCallback(role, guild);
+    successCallback(role, guild, guild.members.get(message.user_id)!);
   }
 
-  private getConfigurationForMessage(messageId: string, emoji: string): ReactionConfiguration | undefined {
-    return this.configuration.find(configuration => configuration.messageId === messageId && configuration.emoji === emoji);
+  private getConfigurationForMessage(messageId: string, channelId: string, emoji: string): ReactionConfiguration | undefined {
+    return this.configuration.find(configuration => configuration.messageId === messageId
+      && configuration.channelId == channelId
+      && configuration.emoji === emoji,
+    );
   }
 }
 
-function messageIsMessageReactionPayload(input: Message | MessageReactionPayload): input is Required<MessageReactionPayload> {
-  const inputAsPayload = input as MessageReactionPayload;
-  return !!inputAsPayload.user_id && !!inputAsPayload.guild_id && !!inputAsPayload.message_id && !!inputAsPayload.emoji && !!inputAsPayload.emoji.name;
+function messageIsMessageReactionPayload(message: Message | MessageReactionPayload): message is Required<MessageReactionPayload> {
+  const messageAsPayload = message as MessageReactionPayload;
+  return !!messageAsPayload.user_id && !!messageAsPayload.guild_id && !!messageAsPayload.message_id && !!messageAsPayload.emoji && !!messageAsPayload.emoji.name;
+}
+
+function userIsUserPayload(user: UserPayload | Member): user is UserPayload {
+  const userAsPayload = user as UserPayload;
+
+  return !!userAsPayload.id;
 }

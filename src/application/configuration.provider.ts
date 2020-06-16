@@ -15,6 +15,7 @@ export interface DiscordConfiguration {
 }
 
 export interface ReactionConfiguration {
+  channelId: string;
   messageId: string;
   roleName: string;
   emoji: string;

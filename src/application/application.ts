@@ -7,6 +7,7 @@ import { DiscordBot } from '../bot/discord-bot.ts';
 import { EventHandler } from '../bot/event-handler.ts';
 import { App, container, InjectionToken, instanceCachingFactory } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
+import { VERSION } from '../version.ts';
 import { AlosaurDebugAdapter } from './alosaur-debug-adapter.ts';
 import { Configuration, ConfigurationProvider } from './configuration.provider.ts';
 import { DiTokens } from './di-tokens.ts';
@@ -17,6 +18,8 @@ export class Application {
   private app?: App<any>;
 
   async initialize(): Promise<void> {
+    debug('Initializing the Boundfox Studios Bot %s', VERSION);
+
     this.initializeDependencyInjection();
 
     await AlosaurDebugAdapter.apply();
@@ -32,6 +35,7 @@ export class Application {
 
     this.initializeCommander();
     await this.startDiscordBot();
+
     await this.startHttpServer();
   }
 
@@ -56,6 +60,7 @@ export class Application {
     container.registerSingleton(DiscordBot);
     container.registerSingleton(EventHandler);
     container.registerSingleton(CommandHandler);
+    container.registerSingleton(ReactionHandler);
 
     this.registerCommands([InfoCommand]);
 

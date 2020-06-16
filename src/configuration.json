@@ -1,18 +1,22 @@
 {
+  "//": "All IDs are from the BFS Test Server",
   "discord": {
     "prefix": "!",
     "reactions": [
       {
+        "channelId": "721811220176306258",
         "messageId": "721811447327359026",
         "roleName": "Rules accepted",
         "emoji": "✅"
       },
       {
+        "channelId": "721820370138562560",
         "messageId": "721820743142473910",
         "roleName": "Developer",
         "emoji": "⌨️"
       },
       {
+        "channelId": "721820370138562560",
         "messageId": "721820743142473910",
         "roleName": "Artist",
         "emoji": "🎨"
