@@ -11,6 +11,6 @@ mv bot.js .deploy
 cp server-configuration/* .deploy/
 
 cd .deploy
-rsync -avzhe ssh --progress --delete ./* $REMOTE_SERVER:~/bot/.deploy
+rsync -avzhe ssh --progress --delete --remove-source-files ./* $REMOTE_SERVER:~/bot/.deploy
 
 rm -rf .deploy
