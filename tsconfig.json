@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
     "strictNullChecks": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "lib": [
+      "es2020",
+      "deno.worker",
+      "deno.unstable",
+      "deno.ns"
+    ]
   }
 }
