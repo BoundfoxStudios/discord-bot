@@ -8,6 +8,7 @@ denon bundle
 
 mkdir .deploy
 mv bot.js .deploy
+cp lock.json .deploy
 cp server-configuration/* .deploy/
 
 cd .deploy

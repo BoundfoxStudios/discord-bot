@@ -6,7 +6,7 @@
   },
   "scripts": {
     "start": {
-      "cmd": "deno run src/index.ts",
+      "cmd": "deno run --cached-only src/index.ts",
       "allow": [
         "env",
         "net",
@@ -19,7 +19,16 @@
       "unstable": true,
       "desc": "Runs a development server with watch enabled.",
       "inspect": "127.0.0.1:9229",
-      "tsconfig": "tsconfig.json"
+      "tsconfig": "tsconfig.json",
+      "lock": "lock.json"
+    },
+    "lock": {
+      "cmd": "deno cache --lock-write src/deps.ts https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/module/shard.ts",
+      "description": "Writes the lock file",
+      "unstable": true,
+      "lock": "lock.json",
+      "tsconfig": "tsconfig.json",
+      "watch": false
     },
     "bundle": {
       "cmd": "deno bundle src/index.ts bot.js",
