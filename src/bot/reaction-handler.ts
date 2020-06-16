@@ -40,15 +40,12 @@ export class ReactionHandler {
   }
 
   private process(message: Message | MessageReactionPayload, successCallback: (role: Role, guild: Guild) => void) {
-    if (!messageIsMessageReactionPayload(message) || !cache.guilds.has(message.guild_id)) {
-      debug('There was an error setting the role for %o', message);
-      return;
-    }
+    let configuration: ReactionConfiguration | undefined;
 
-    const configuration = this.getConfigurationForMessage(message.message_id, message.emoji.name!);
-
-    if (!configuration) {
-      debug('No configuration found for %s, message id %s', message.emoji.name!, message.message_id);
+    if (!messageIsMessageReactionPayload(message)
+      || !cache.guilds.has(message.guild_id)
+      || !(configuration = this.getConfigurationForMessage(message.message_id, message.emoji.name!))
+    ) {
       return;
     }
 
