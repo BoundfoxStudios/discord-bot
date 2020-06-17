@@ -1,7 +1,19 @@
 import { Configuration } from '../application/configuration.provider.ts';
 import { DiTokens } from '../application/di-tokens.ts';
-import { EventHandlers, Guild, Inject, Injectable, Message, MessageReactionPayload, Reaction_Payload } from '../deps.ts';
+import {
+  ActivityType,
+  editBotsStatus,
+  EventHandlers,
+  Guild,
+  Inject,
+  Injectable,
+  Message,
+  MessageReactionPayload,
+  Reaction_Payload,
+  StatusType,
+} from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
+import { VERSION } from '../version.ts';
 import { CommandHandler } from './command-handler.ts';
 import { ReactionHandler } from './reaction-handler.ts';
 
@@ -18,6 +30,8 @@ export class EventHandler implements EventHandlers {
 
   ready(): void {
     debug('Ready event received.');
+
+    editBotsStatus(StatusType.Online, `**!info** | v${VERSION}`, ActivityType.Game);
   }
 
   guildCreate(guild: Guild): void {

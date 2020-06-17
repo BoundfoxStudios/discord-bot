@@ -35,5 +35,8 @@ export {
   getMember,
   getChannels,
   Channel,
+  editBotsStatus,
+  StatusType,
+  ActivityType
 } from 'https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/mod.ts';
 export { parse } from 'https://deno.land/std@0.56.0/flags/mod.ts';
