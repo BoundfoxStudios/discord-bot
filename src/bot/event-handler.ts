@@ -31,7 +31,7 @@ export class EventHandler implements EventHandlers {
   ready(): void {
     debug('Ready event received.');
 
-    editBotsStatus(StatusType.Online, `**!info** | v${VERSION}`, ActivityType.Game);
+    editBotsStatus(StatusType.Online, `!info | v${VERSION}`);
   }
 
   guildCreate(guild: Guild): void {
