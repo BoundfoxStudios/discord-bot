@@ -22,7 +22,7 @@
       "tsconfig": "tsconfig.json",
       "lock": "lock.json"
     },
-    "lock": {
+    "cache": {
       "cmd": "deno cache --lock-write src/deps.ts https://raw.githubusercontent.com/Skillz4Killz/Discordeno/v5/module/shard.ts",
       "description": "Writes the lock file",
       "unstable": true,
