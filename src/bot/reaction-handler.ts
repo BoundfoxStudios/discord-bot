@@ -2,7 +2,7 @@ import { Configuration, ReactionConfiguration } from '../application/configurati
 import { DiTokens } from '../application/di-tokens.ts';
 import {
   addRole,
-  cache, Channel, getChannels,
+  cache,
   getMember,
   getMessage,
   getReactions,
@@ -56,8 +56,6 @@ export class ReactionHandler {
 
     this.syncDone = true;
 
-    const userCache: { [key: string]: Member } = {};
-
     debug('Reaction sync started...');
 
     await this.configuration.reduce((configurationPromise, configuration) => configurationPromise
@@ -76,7 +74,14 @@ export class ReactionHandler {
               .then(() => getReactions(message, reaction.emoji.name!))
               .then(users => users.reduce((userPromise, userPartial: UserPayload | Member) => userPromise
                   .then(() => userIsUserPayload(userPartial) ? userPartial.id : userPartial.user.id)
-                  .then(async userId => userCache[userId] || (userCache[userId] = await getMember(guild.id, userId) as Member))
+                  .then(async userId => ({ userId, member: guild.members.get(userId) || await getMember(guild.id, userId) }))
+                  .then(({ userId, member }) => {
+                    if (!member) {
+                      throw new Error(`Skipping member ${userId}, not found.`);
+                    }
+
+                    return member;
+                  })
                   .then(member => ({ member, role: getRoleByName(guild, configuration.roleName)! }))
                   .then(({ member, role }) => {
                     if (!member.roles.includes(role.id)) {
