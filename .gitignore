@@ -179,4 +179,4 @@ fabric.properties
 
 .DS_Store
 bot.js
-server-configuration
+server-configuration/configuration.json
