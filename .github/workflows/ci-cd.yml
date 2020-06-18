@@ -30,7 +30,7 @@ jobs:
         uses: easingthemes/ssh-deploy@v2.1.2
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          ARGS: "avzh --delete"
+          ARGS: "-avzh --delete"
           REMOTE_HOST: ${{ secrets.SERVER_REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.SERVER_REMOTE_USER }}
           SOURCE: ".deploy/*"
