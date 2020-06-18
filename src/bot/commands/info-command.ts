@@ -16,6 +16,7 @@ export class InfoCommand implements Command {
       .addField('Repository', 'https://github.com/boundfoxstudios/discord-bot')
       .addField('Website', 'https://boundfoxstudios.com')
       .addField('YouTube', 'https://www.youtube.com/c/Boundfox')
+      .addField('Patreon', 'https://www.patreon.com/boundfoxstudios')
       .addField('Twitter', 'https://twitter.com/boundfoxstudios')
       .addField('Facebook', 'https://facebook.com/boundfoxstudios')
       .addField('Instagram', 'https://instagram.com/boundfoxstudios');
