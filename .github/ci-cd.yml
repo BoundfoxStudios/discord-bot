@@ -1,0 +1,37 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Setup Deno environment
+        uses: denolib/setup-deno@v1.3.0
+        with:
+          deno-version: 1.1.0
+
+      - name: Install denon
+        run: sh install-denon.sh
+
+      - name: Bundle the bot
+        run: denon bundle
+
+      - name: Prepare the deployment
+        run: sh prepare-deployment.sh
+
+      - name: Deploy to Boundfox Studios Root Server
+        uses: easingthemes/ssh-deploy@v2.1.2
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "avzh --delete"
+          REMOTE_HOST: ${{ secrets.SERVER_REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.SERVER_REMOTE_USER }}
+          SOURCE: ".deploy/*"
+          TARGET: ${{ secrets.SERVER_TARGET }}
