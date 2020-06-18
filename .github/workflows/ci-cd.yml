@@ -28,7 +28,7 @@ jobs:
 
       - name: Deploy to Boundfox Studios Root Server
         uses: easingthemes/ssh-deploy@v2.1.2
-        with:
+        env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
           ARGS: "avzh --delete"
           REMOTE_HOST: ${{ secrets.SERVER_REMOTE_HOST }}
