@@ -21,7 +21,7 @@ jobs:
         run: sh install-denon.sh
 
       - name: Bundle the bot
-        run: denon bundle
+        run: .deno/bin/denon bundle
 
       - name: Prepare the deployment
         run: sh prepare-deployment.sh
