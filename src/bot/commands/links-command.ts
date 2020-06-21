@@ -16,7 +16,7 @@ export interface LinksCommandConfiguration {
 
 @Injectable()
 export class LinksCommand implements Command {
-  readonly description = 'TODO';
+  readonly description = 'Command to manage some link lists. Use !links to get all category names.';
   readonly name = 'links';
   private readonly configuration: LinksCommandConfiguration;
 
@@ -42,15 +42,6 @@ export class LinksCommand implements Command {
     }
 
     await this.handleLinkRequest(channel, commands);
-
-    // !links
-    //  -> LinksService.listCategories();
-    // !links <categoryName>
-    //  -> LinksService.listLinks(categoryName);
-    // !links add <categoryName> <url> <name?>
-    //  -> LinksService.addLink(url, categoryName, name);
-    // !links remove <url>
-    //  -> LinksService.removeLink(url);
   }
 
   private async sendCategories(channel: Channel): Promise<void> {

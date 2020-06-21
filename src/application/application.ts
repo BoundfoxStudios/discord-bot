@@ -94,8 +94,7 @@ export class Application {
     const databaseProvider = container.resolve(DatabaseProvider);
     const databaseInitializer = container.resolve(DatabaseInitializer);
 
-    await databaseProvider.connect()
-
+    await databaseProvider.connect();
     await databaseInitializer.initialize();
   }
 }
