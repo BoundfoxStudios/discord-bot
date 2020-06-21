@@ -22,5 +22,19 @@
         "emoji": "🎨"
       }
     ]
+  },
+  "database": {
+    "filepath": "./bot.sqlite3"
+  },
+  "commands": {
+    "links": {
+      "managementRoleIds": [
+        "724308331120033892"
+      ],
+      "defaultCategories": [
+        "Blender",
+        "Unity"
+      ]
+    }
   }
 }

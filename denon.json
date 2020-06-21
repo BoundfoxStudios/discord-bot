@@ -10,7 +10,8 @@
       "allow": [
         "env",
         "net",
-        "read"
+        "read",
+        "write"
       ],
       "env": {
         "DEBUG": "*",

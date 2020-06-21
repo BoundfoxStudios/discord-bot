@@ -40,3 +40,5 @@ export {
   ActivityType
 } from 'https://raw.githubusercontent.com/Skillz4Killz/Discordeno/master/mod.ts';
 export { parse } from 'https://deno.land/std@0.56.0/flags/mod.ts';
+
+export { DataTypes, Database, Model, Relationships } from 'https://deno.land/x/denodb/mod.ts';

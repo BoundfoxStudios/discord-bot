@@ -180,3 +180,4 @@ fabric.properties
 .DS_Store
 bot.js
 server-configuration/configuration.json
+bot.sqlite3

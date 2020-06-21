@@ -2,9 +2,12 @@ import { ApiArea } from '../api/area.ts';
 import { CommandHandler } from '../bot/command-handler.ts';
 import { Command } from '../bot/commands/command.ts';
 import { InfoCommand } from '../bot/commands/info-command.ts';
-import { ReactionHandler } from '../bot/reaction-handler.ts';
+import { LinksCommand } from '../bot/commands/links-command.ts';
 import { DiscordBot } from '../bot/discord-bot.ts';
 import { EventHandler } from '../bot/event-handler.ts';
+import { ReactionHandler } from '../bot/reaction-handler.ts';
+import { DatabaseInitializer } from '../database/database-initializer.ts';
+import { DatabaseProvider } from '../database/database-provider.ts';
 import { App, container, InjectionToken, instanceCachingFactory } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
 import { VERSION } from '../version.ts';
@@ -32,6 +35,8 @@ export class Application {
       debug('Can not start server, did you run initialize?');
       return;
     }
+
+    await this.initializeDatabase();
 
     this.initializeCommander();
     await this.startDiscordBot();
@@ -61,8 +66,10 @@ export class Application {
     container.registerSingleton(EventHandler);
     container.registerSingleton(CommandHandler);
     container.registerSingleton(ReactionHandler);
+    container.registerSingleton(DatabaseProvider);
+    container.registerSingleton(DatabaseInitializer);
 
-    this.registerCommands([InfoCommand]);
+    this.registerCommands([InfoCommand, LinksCommand]);
 
     container.registerSingleton(ConfigurationProvider);
 
@@ -77,5 +84,14 @@ export class Application {
 
   private registerCommands(commands: InjectionToken<Command>[]): void {
     commands.forEach(command => container.registerSingleton(DiTokens.Command, command));
+  }
+
+  private async initializeDatabase(): Promise<void> {
+    const databaseProvider = container.resolve(DatabaseProvider);
+    const databaseInitializer = container.resolve(DatabaseInitializer);
+
+    await databaseProvider.connect()
+
+    await databaseInitializer.initialize();
   }
 }

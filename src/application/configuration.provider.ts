@@ -1,3 +1,4 @@
+import { LinksCommandConfiguration } from '../bot/commands/links-command.ts';
 import { config, join, parse, readJsonSync } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
 
@@ -6,6 +7,12 @@ const debug = deriveDebug('ConfigurationProvider');
 export interface Configuration {
   server: ServerConfiguration;
   discord: DiscordConfiguration;
+  database: DatabaseConfiguration;
+  commands: CommandsConfiguration;
+}
+
+export interface CommandsConfiguration {
+  links: LinksCommandConfiguration;
 }
 
 export interface DiscordConfiguration {
@@ -23,6 +30,10 @@ export interface ReactionConfiguration {
 
 export interface ServerConfiguration {
   port: number;
+}
+
+export interface DatabaseConfiguration {
+  filepath: string;
 }
 
 export class ConfigurationProvider {
@@ -43,6 +54,8 @@ export class ConfigurationProvider {
     this.internalConfiguration = {
       server: this.validateServerConfiguration(),
       discord: this.validateDiscordConfiguration(),
+      database: this.validateDatabaseConfiguration(),
+      commands: this.validateCommandsConfiguration(),
     };
 
     // Just to remove the token, so we don't log it.
@@ -59,7 +72,7 @@ export class ConfigurationProvider {
     debug(`Trying to read from configuration file ${file}`);
 
     if (!Deno.statSync(file).isFile) {
-      debug ('Configuration file was not found.');
+      debug('Configuration file was not found.');
       return;
     }
 
@@ -82,5 +95,26 @@ export class ConfigurationProvider {
     }
 
     return { token, prefix, reactions: this.configurationFile.discord.reactions };
+  }
+
+  private validateDatabaseConfiguration(): DatabaseConfiguration {
+    const filepath = this.configurationFile.database.filepath;
+
+    if (!filepath) {
+      throw new Error('database.filepath not set.');
+    }
+
+    return { filepath };
+  }
+
+  // TODO: Better validation for commands.
+  private validateCommandsConfiguration(): CommandsConfiguration {
+    const commands = this.configurationFile.commands;
+
+    if (!commands) {
+      throw new Error('commands not set.');
+    }
+
+    return commands;
   }
 }
