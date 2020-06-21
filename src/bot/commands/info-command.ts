@@ -1,5 +1,5 @@
 import { Message, sendMessage } from '../../deps.ts';
-import { MessageEmbed } from '../message-embed.ts';
+import { BoundfoxMessageEmbed } from '../message-embed.ts';
 import { Command } from './command.ts';
 
 export class InfoCommand implements Command {
@@ -7,9 +7,7 @@ export class InfoCommand implements Command {
   readonly description = 'Prints some basic information about the bot.';
 
   async execute(message: Message): Promise<void> {
-    const embed = new MessageEmbed()
-      .setUrl('https://github.com/boundfoxstudios/discord-bot')
-      .setColor('#ffeb3b')
+    const embed = new BoundfoxMessageEmbed()
       .setDescription(
         `Hi! I'm the official Boundfox Studios Bot! I'm an open source discord bot. Feel free to take a look at my code. :-)`,
       )

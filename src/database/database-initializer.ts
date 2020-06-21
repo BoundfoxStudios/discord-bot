@@ -3,6 +3,7 @@ import { DiTokens } from '../application/di-tokens.ts';
 import { Inject, Injectable } from '../deps.ts';
 import { deriveDebug } from '../utils.ts';
 import { CategoryModel } from './models/links-command-models.ts';
+import { modelExists } from './query-helper.ts';
 
 const debug = deriveDebug('DatabaseInitializer');
 
@@ -20,9 +21,9 @@ export class DatabaseInitializer {
   }
 
   private async createCategory(name: string): Promise<void> {
-    const existingCategory = await CategoryModel.where('name', name).count();
+    name = name.toLowerCase();
 
-    if (existingCategory) {
+    if (await modelExists(CategoryModel, 'name', name)) {
       return;
     }
 

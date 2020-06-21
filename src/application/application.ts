@@ -1,5 +1,6 @@
 import { ApiArea } from '../api/area.ts';
 import { CommandHandler } from '../bot/command-handler.ts';
+import { CommandParser } from '../bot/command-parser.ts';
 import { Command } from '../bot/commands/command.ts';
 import { InfoCommand } from '../bot/commands/info-command.ts';
 import { LinksCommand } from '../bot/commands/links-command.ts';
@@ -9,6 +10,7 @@ import { ReactionHandler } from '../bot/reaction-handler.ts';
 import { DatabaseInitializer } from '../database/database-initializer.ts';
 import { DatabaseProvider } from '../database/database-provider.ts';
 import { App, container, InjectionToken, instanceCachingFactory } from '../deps.ts';
+import { LinksService } from '../services/links-service.ts';
 import { deriveDebug } from '../utils.ts';
 import { VERSION } from '../version.ts';
 import { AlosaurDebugAdapter } from './alosaur-debug-adapter.ts';
@@ -68,6 +70,8 @@ export class Application {
     container.registerSingleton(ReactionHandler);
     container.registerSingleton(DatabaseProvider);
     container.registerSingleton(DatabaseInitializer);
+    container.registerSingleton(LinksService);
+    container.registerSingleton(CommandParser);
 
     this.registerCommands([InfoCommand, LinksCommand]);
 

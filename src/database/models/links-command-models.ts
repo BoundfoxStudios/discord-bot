@@ -30,7 +30,7 @@ export class LinkModel extends Model {
 
   id!: number;
   categoryId!: number;
-  title!: string;
+  title?: string;
   url!: string;
 
   static category(): Promise<CategoryModel> {

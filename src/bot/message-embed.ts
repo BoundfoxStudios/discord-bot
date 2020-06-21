@@ -134,3 +134,21 @@ export class MessageEmbed implements Exclude<Embed, 'type' | 'timestamp' | 'prov
     }
   }
 }
+
+export class BoundfoxMessageEmbed extends MessageEmbed {
+  constructor() {
+    super();
+
+    this.setUrl('https://github.com/boundfoxstudios/discord-bot');
+    this.setColor('#ffeb3b');
+    this.setThumbnail('https://boundfoxstudios.com/wp-content/uploads/2020/02/cropped-Logo_New-40x40.png'); // TODO: move this to better host
+  }
+}
+
+export class ErrorMessageEmbed extends BoundfoxMessageEmbed {
+  constructor() {
+    super();
+
+    this.setColor('#dc143c');
+  }
+}
