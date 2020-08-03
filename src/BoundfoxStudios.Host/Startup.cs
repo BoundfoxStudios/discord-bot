@@ -22,8 +22,7 @@ namespace BoundfoxStudios.Host
     {
       services.AddControllers();
 
-      services.Configure<DiscordBotOptions>(Configuration.GetSection("DiscordBot"));
-      services.AddDiscordBot(Configuration.GetSection(""));
+      services.AddDiscordBot(Configuration.GetSection("DiscordBot"));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -16,6 +16,7 @@ namespace BoundfoxStudios.DiscordBot.Extensions
       services.AddSingleton<DiscordSocketClient>();
       services.AddSingleton<CommandHandler>();
       services.AddSingleton<CommandService>();
+      services.AddSingleton<EventHandler>();
     }
   }
 }

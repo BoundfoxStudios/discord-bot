@@ -15,34 +15,30 @@ namespace BoundfoxStudios.DiscordBot
     private readonly IOptionsMonitor<DiscordBotOptions> _optionsMonitor;
     private readonly DiscordSocketClient _client;
     private readonly CommandHandler _commandHandler;
+    private readonly EventHandler _eventHandler;
 
     public DiscordBot(
       ILogger<DiscordBot> logger,
       IOptionsMonitor<DiscordBotOptions> optionsMonitor,
       DiscordSocketClient discordSocketClient,
-      CommandHandler commandHandler
+      CommandHandler commandHandler,
+      EventHandler eventHandler
     )
     {
       _logger = logger;
       _optionsMonitor = optionsMonitor;
       _client = discordSocketClient;
       _commandHandler = commandHandler;
+      _eventHandler = eventHandler;
     }
 
     public async Task StartAsync()
     {
-      _client.Log += DiscordClientLog;
-
+      _eventHandler.Initialize();
+      
       await _commandHandler.InitializeAsync();
       await LoginAsync();
       await InternalStartAsync();
-    }
-
-    private Task DiscordClientLog(LogMessage logMessage)
-    {
-      _logger.Log(logMessage.Severity.ToLogLevel(), logMessage.Exception, logMessage.Message);
-
-      return Task.CompletedTask;
     }
 
     private async Task InternalStartAsync()
