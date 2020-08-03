@@ -7,10 +7,10 @@ namespace BoundfoxStudios.DiscordBot.Commands
 {
   public class MetaCommands : ModuleBase<ICommandContext>
   {
-    [Command("info")]
+    [Command("info", true)]
     public async Task Info() => await ReplyAsync(
       embed: new EmbedBuilder()
-        .WithBoundfoxStudiosColor()
+        .AsBoundfoxStudiosDefaultMessage()
         .WithDescription("Hi! I'm the official Boundfox Studios Bot! I'm an open source discord bot. Feel free to take a look at my code. :-)")
         .AddField("Repository", "https://github.com/boundfoxstudios/discord-bot")
         .AddField("Website", "https://boundfoxstudios.com")

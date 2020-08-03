@@ -19,7 +19,13 @@ namespace BoundfoxStudios.DiscordBot.Extensions
 
     public static EmbedBuilder AsBoundfoxStudiosDefaultMessage(this EmbedBuilder builder)
     {
-      return builder.WithBoundfoxStudiosColor();
+      return builder.WithBoundfoxStudiosColor()
+        .WithBoundfoxStudiosBotImage();
+    }
+
+    public static EmbedBuilder WithBoundfoxStudiosBotImage(this EmbedBuilder builder)
+    {
+      return builder.WithThumbnailUrl("https://raw.githubusercontent.com/BoundfoxStudios/discord-bot/main/assets/bot-thumbnail.png");
     }
   }
 }
