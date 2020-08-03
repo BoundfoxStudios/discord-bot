@@ -1,0 +1,32 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Setup .NET Core  
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+
+      - name: Publish
+        run: dotnet publish -c Release -r linux-x64 -o .deploy 
+        working-directory: src/BoundfoxStudios.Host
+
+      - name: Deploy to Boundfox Studios Root Server
+        uses: easingthemes/ssh-deploy@v2.1.2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-avzh --delete"
+          REMOTE_HOST: ${{ secrets.SERVER_REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.SERVER_REMOTE_USER }}
+          SOURCE: "src/BoundfoxStudios.Host/.deploy/*"
+          TARGET: ${{ secrets.SERVER_TARGET }}
