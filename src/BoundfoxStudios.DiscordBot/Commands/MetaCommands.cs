@@ -8,7 +8,7 @@ namespace BoundfoxStudios.DiscordBot.Commands
   public class MetaCommands : ModuleBase<ICommandContext>
   {
     [Command("info", true)]
-    public async Task Info() => await ReplyAsync(
+    public async Task InfoAsync() => await ReplyAsync(
       embed: new EmbedBuilder()
         .AsBoundfoxStudiosDefaultMessage()
         .WithDescription("Hi! I'm the official Boundfox Studios Bot! I'm an open source discord bot. Feel free to take a look at my code. :-)")

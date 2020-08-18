@@ -31,7 +31,7 @@ namespace BoundfoxStudios.DiscordBot.Commands
       _commandService.CommandExecuted += CommandExecuted;
       _discordClient.MessageReceived += MessageReceived;
 
-      await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider);
+      await _commandService.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider.CreateScope().ServiceProvider);
     }
 
     private async Task MessageReceived(SocketMessage rawMessage)
@@ -54,7 +54,11 @@ namespace BoundfoxStudios.DiscordBot.Commands
       }
 
       var context = new SocketCommandContext(_discordClient, message);
-      await _commandService.ExecuteAsync(context, argPos, _serviceProvider);
+
+      using (var serviceScope = _serviceProvider.CreateScope())
+      {
+        await _commandService.ExecuteAsync(context, argPos, serviceScope.ServiceProvider);
+      }
     }
 
     private async Task CommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result)
@@ -68,7 +72,7 @@ namespace BoundfoxStudios.DiscordBot.Commands
       {
         return;
       }
-
+      
       await context.Channel.SendMessageAsync($"error: {result}");
     }
 

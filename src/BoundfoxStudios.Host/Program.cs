@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
+using BoundfoxStudios.DiscordBot.Database;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -21,12 +23,27 @@ namespace BoundfoxStudios.Host
       {
         var host = CreateHostBuilder(args).Build();
 
+        await MigrateAndSeedDatabaseAsync(host);
+
         await host.RunAsync();
       }
       finally
       {
         Log.CloseAndFlush();
       }
+    }
+
+    private static async Task MigrateAndSeedDatabaseAsync(IHost host)
+    {
+      using (var serviceProvider = host.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+      {
+        var databaseMigrator = serviceProvider.ServiceProvider.GetRequiredService<DatabaseMigrator>();
+        await databaseMigrator.MigrateAsync();
+
+        var databaseSeeder = serviceProvider.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+        await databaseSeeder.SeedAsync();
+      };
+      
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
