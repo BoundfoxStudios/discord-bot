@@ -1,3 +1,4 @@
+using BoundfoxStudios.Data.Extensions;
 using BoundfoxStudios.DiscordBot;
 using BoundfoxStudios.DiscordBot.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +23,7 @@ namespace BoundfoxStudios.Host
     {
       services.AddControllers();
 
+      services.AddData(Configuration.GetSection("Data"));
       services.AddDiscordBot(Configuration.GetSection("DiscordBot"));
     }
 

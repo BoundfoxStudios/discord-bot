@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Logging;
 
-namespace BoundfoxStudios.DiscordBot.Database
+namespace BoundfoxStudios.Data.Database
 {
   public class DatabaseMigrator
   {

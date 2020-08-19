@@ -11,6 +11,8 @@ ProjectSection(SolutionItems) = preProject
 	add-migration.sh = add-migration.sh
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoundfoxStudios.Data", "BoundfoxStudios.Data\BoundfoxStudios.Data.csproj", "{1CB2059D-6332-453D-BF9D-5A03EB1BFFBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,5 +27,9 @@ Global
 		{17870EAB-4DAF-410E-850B-0BA295D9E413}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17870EAB-4DAF-410E-850B-0BA295D9E413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17870EAB-4DAF-410E-850B-0BA295D9E413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CB2059D-6332-453D-BF9D-5A03EB1BFFBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CB2059D-6332-453D-BF9D-5A03EB1BFFBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CB2059D-6332-453D-BF9D-5A03EB1BFFBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CB2059D-6332-453D-BF9D-5A03EB1BFFBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
+using BoundfoxStudios.Data.Services;
 using BoundfoxStudios.DiscordBot.Extensions;
-using BoundfoxStudios.DiscordBot.Services;
 using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.Logging;

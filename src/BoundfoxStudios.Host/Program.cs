@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using BoundfoxStudios.DiscordBot.Database;
+using BoundfoxStudios.Data.Database;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,8 +42,7 @@ namespace BoundfoxStudios.Host
 
         var databaseSeeder = serviceProvider.ServiceProvider.GetRequiredService<DatabaseSeeder>();
         await databaseSeeder.SeedAsync();
-      };
-      
+      }
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>

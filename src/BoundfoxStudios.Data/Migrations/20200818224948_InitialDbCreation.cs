@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BoundfoxStudios.DiscordBot.Migrations
+namespace BoundfoxStudios.Data.Migrations
 {
     public partial class InitialDbCreation : Migration
     {
