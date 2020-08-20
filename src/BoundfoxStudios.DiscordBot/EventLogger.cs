@@ -19,13 +19,6 @@ namespace BoundfoxStudios.DiscordBot
     private readonly CommandService _commandService;
     private readonly IOptionsMonitor<DiscordBotOptions> _options;
 
-    private enum EventLoggerLogLevel
-    {
-      Error,
-      Information,
-      Success,
-    }
-
     public EventLogger(
       ILogger<DiscordBot> logger, // it should log in the context of the DiscordBot
       DiscordSocketClient client,
@@ -55,10 +48,25 @@ namespace BoundfoxStudios.DiscordBot
       _client.MessageUpdated += LogMessageUpdatedAsync;
       _client.RoleCreated += LogRoleCreatedAsync;
       _client.RoleDeleted += LogRoleDeletedAsync;
-      
+      _client.MessageReceived += LogPrivateMessagesAsync;
+
       // We don't need them, yet?
       //_client.ChannelUpdated += LogChannelUpdatedAsync;
       // _client.RoleUpdated += LogRoleUpdatedAsync;
+    }
+
+    private async Task LogPrivateMessagesAsync(SocketMessage message)
+    {
+      if (!(message.Channel is SocketDMChannel))
+      {
+        return;
+      }
+
+      var builder = CreateDefaultEmbedBuilder(message.Author)
+        .WithDescription($"{TextUtils.Bold("Got a private message")}\n{message.Content}")
+        .WithFooter($"Author ID: {message.Author.Id}");
+
+      await LogInformationAsync(builder);
     }
 
     private async Task LogRoleDeletedAsync(SocketRole role)
@@ -81,14 +89,16 @@ namespace BoundfoxStudios.DiscordBot
 
     private async Task LogMessageDeletedAsync(Cacheable<IMessage, ulong> deletedMessage, ISocketMessageChannel channel)
     {
-      var message = await deletedMessage.GetOrDownloadAsync(); 
-      
+      var message = await deletedMessage.GetOrDownloadAsync();
+
       if (message.Author.IsBot)
       {
         return;
       }
+
       var builder = CreateDefaultEmbedBuilder(message.Author)
-        .WithDescription($"{TextUtils.Bold($"Message sent by {MentionUtils.MentionUser(message.Author.Id)} deleted in {MentionUtils.MentionChannel(channel.Id)}")}\n{message.Content}")
+        .WithDescription(
+          $"{TextUtils.Bold($"Message sent by {MentionUtils.MentionUser(message.Author.Id)} deleted in {MentionUtils.MentionChannel(channel.Id)}")}\n{message.Content}")
         .WithFooter($"Author ID: {message.Author.Id} | Message ID: {message.Id}");
 
       await LogInformationAsync(builder);
@@ -216,6 +226,11 @@ namespace BoundfoxStudios.DiscordBot
 
     private async Task LogChannelCreatedAsync(SocketChannel channel)
     {
+      if (!(channel is SocketGuildChannel))
+      {
+        return;
+      }
+
       var builder = CreateDefaultEmbedBuilder()
         .WithBoldDescription($"Channel created: {channel.Id}");
 
@@ -244,23 +259,22 @@ namespace BoundfoxStudios.DiscordBot
 
     private async Task LogInformationAsync(EmbedBuilder builder)
     {
-      await LogAsync(EventLoggerLogLevel.Information, builder.WithInformationColor());
+      await LogAsync(builder.WithInformationColor());
     }
 
     private async Task LogDestructiveAsync(EmbedBuilder builder)
     {
-      await LogAsync(EventLoggerLogLevel.Error, builder.WithErrorColor());
+      await LogAsync(builder.WithErrorColor());
     }
 
     private async Task LogSuccessAsync(EmbedBuilder builder)
     {
-      await LogAsync(EventLoggerLogLevel.Success, builder.WithSuccessColor());
+      await LogAsync(builder.WithSuccessColor());
     }
 
-    private async Task LogAsync(EventLoggerLogLevel logLevel, EmbedBuilder builder)
+    private async Task LogAsync(EmbedBuilder builder)
     {
-      _logger.Log(
-        EventLoggerLogLevelToLogLevel(logLevel),
+      _logger.LogInformation(
         "Author [{0}], Description[{1}], Footer[{2}], Fields [{3}]",
         builder.Author?.Name,
         builder.Description,
@@ -296,11 +310,5 @@ namespace BoundfoxStudios.DiscordBot
 
       return Task.CompletedTask;
     }
-
-    private LogLevel EventLoggerLogLevelToLogLevel(EventLoggerLogLevel logLevel) => logLevel switch
-    {
-      EventLoggerLogLevel.Error => LogLevel.Error,
-      _ => LogLevel.Information
-    };
   }
 }
