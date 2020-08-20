@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using BoundfoxStudios.DiscordBot.Commands;
+using BoundfoxStudios.DiscordBot.Modules;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
@@ -15,7 +16,7 @@ namespace BoundfoxStudios.DiscordBot
     private readonly DiscordSocketClient _client;
     private readonly CommandHandler _commandHandler;
     private readonly EventHandler _eventHandler;
-    private readonly EventLogger _eventLogger;
+    private readonly EventLoggerModule _eventLoggerModule;
 
     public DiscordBot(
       ILogger<DiscordBot> logger,
@@ -23,7 +24,7 @@ namespace BoundfoxStudios.DiscordBot
       DiscordSocketClient discordSocketClient,
       CommandHandler commandHandler,
       EventHandler eventHandler,
-      EventLogger eventLogger
+      EventLoggerModule eventLoggerModule
     )
     {
       _logger = logger;
@@ -31,12 +32,12 @@ namespace BoundfoxStudios.DiscordBot
       _client = discordSocketClient;
       _commandHandler = commandHandler;
       _eventHandler = eventHandler;
-      _eventLogger = eventLogger;
+      _eventLoggerModule = eventLoggerModule;
     }
 
     public async Task StartAsync()
     {
-      _eventLogger.Initialize();
+      _eventLoggerModule.Initialize();
       _eventHandler.Initialize();
       
       await _commandHandler.InitializeAsync();

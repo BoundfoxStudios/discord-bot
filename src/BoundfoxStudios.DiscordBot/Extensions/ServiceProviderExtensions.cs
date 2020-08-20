@@ -1,5 +1,6 @@
 using System;
 using BoundfoxStudios.DiscordBot.Commands;
+using BoundfoxStudios.DiscordBot.Modules;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +21,7 @@ namespace BoundfoxStudios.DiscordBot.Extensions
       services.AddSingleton<CommandHandler>();
       services.AddSingleton<CommandService>();
       services.AddSingleton<EventHandler>();
-      services.AddSingleton<EventLogger>();
+      services.AddSingleton<EventLoggerModule>();
       services.AddSingleton<ReactionManager>();
     }
 

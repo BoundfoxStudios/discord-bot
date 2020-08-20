@@ -10,16 +10,16 @@ using Microsoft.Extensions.Options;
 
 // TODO: Refactor this ugly thing!
 
-namespace BoundfoxStudios.DiscordBot
+namespace BoundfoxStudios.DiscordBot.Modules
 {
-  public class EventLogger
+  public class EventLoggerModule
   {
     private readonly ILogger<DiscordBot> _logger;
     private readonly DiscordSocketClient _client;
     private readonly CommandService _commandService;
     private readonly IOptionsMonitor<DiscordBotOptions> _options;
 
-    public EventLogger(
+    public EventLoggerModule(
       ILogger<DiscordBot> logger, // it should log in the context of the DiscordBot
       DiscordSocketClient client,
       CommandService commandService,
@@ -57,6 +57,11 @@ namespace BoundfoxStudios.DiscordBot
 
     private async Task LogPrivateMessagesAsync(SocketMessage message)
     {
+      if (_options.CurrentValue.Modules?.EventLogger == null || !_options.CurrentValue.Modules.EventLogger.LogPrivateMessages)
+      {
+        return;
+      }
+      
       if (!(message.Channel is SocketDMChannel))
       {
         return;

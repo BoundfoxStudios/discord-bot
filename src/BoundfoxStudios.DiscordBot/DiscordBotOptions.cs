@@ -8,6 +8,18 @@ namespace BoundfoxStudios.DiscordBot
     public ulong LogChannelId { get; set; }
     public ReactionManagerOptions ReactionManager { get; set; }
     public int MessageCacheSize { get; set; }
+    
+    public ModuleConfiguration Modules { get; set; }
+  }
+
+  public class ModuleConfiguration
+  {
+    public EventLoggerModuleConfiguration EventLogger { get; set; }
+    
+    public class EventLoggerModuleConfiguration
+    {
+      public bool LogPrivateMessages { get; set; }
+    }
   }
 
   public class ReactionManagerOptions
