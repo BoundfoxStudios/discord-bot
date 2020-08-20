@@ -4,10 +4,12 @@ using BoundfoxStudios.Data.Services;
 using BoundfoxStudios.DiscordBot.Extensions;
 using Discord;
 using Discord.Commands;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
 namespace BoundfoxStudios.DiscordBot.Commands
 {
+  [PublicAPI]
   [Group("links")]
   public class LinksCommands : ModuleBase<ICommandContext>
   {

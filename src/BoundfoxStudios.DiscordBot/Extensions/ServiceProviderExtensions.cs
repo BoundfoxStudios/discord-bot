@@ -1,5 +1,8 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using BoundfoxStudios.DiscordBot.Commands;
+using BoundfoxStudios.DiscordBot.Modules;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -19,9 +22,21 @@ namespace BoundfoxStudios.DiscordBot.Extensions
       services.AddSingleton(DiscordSocketClientFactory);
       services.AddSingleton<CommandHandler>();
       services.AddSingleton<CommandService>();
-      services.AddSingleton<EventHandler>();
-      services.AddSingleton<EventLogger>();
-      services.AddSingleton<ReactionManager>();
+
+      RegisterModules(services);
+    }
+
+    private static void RegisterModules(IServiceCollection services)
+    {
+      var modules = Assembly.GetExecutingAssembly().DefinedTypes
+        .Where(type => type.ImplementedInterfaces.Contains(typeof(IModule)))
+        .Where(type => !type.IsAbstract)
+        .ToList();
+
+      foreach (var module in modules)
+      {
+        services.AddSingleton(typeof(IModule), module);
+      }
     }
 
     private static DiscordSocketClient DiscordSocketClientFactory(IServiceProvider serviceProvider)
