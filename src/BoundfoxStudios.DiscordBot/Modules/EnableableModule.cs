@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -8,15 +9,17 @@ namespace BoundfoxStudios.DiscordBot.Modules
   public abstract class EnableableModule : IModule, IDisposable
   {
     protected readonly ILogger<EnableableModule> Logger;
+    protected readonly DiscordSocketClient Client;
     protected readonly IOptionsMonitor<DiscordBotOptions> Options;
 
     private IDisposable _onChangeHandler;
     private bool _isEnabled;
 
-    protected EnableableModule(IOptionsMonitor<DiscordBotOptions> options, ILogger<EnableableModule> logger)
+    protected EnableableModule(IOptionsMonitor<DiscordBotOptions> options, ILogger<EnableableModule> logger, DiscordSocketClient client)
     {
       Options = options;
       Logger = logger;
+      Client = client;
     }
 
     public void Dispose()
@@ -55,7 +58,6 @@ namespace BoundfoxStudios.DiscordBot.Modules
         Logger.LogInformation("Enabling module...");
         _isEnabled = true;
         Enable();
-        return;
       }
     }
 

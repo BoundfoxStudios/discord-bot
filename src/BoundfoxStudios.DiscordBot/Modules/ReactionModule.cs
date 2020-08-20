@@ -11,17 +11,15 @@ namespace BoundfoxStudios.DiscordBot.Modules
   [UsedImplicitly]
   public class ReactionModule : EnableableModule
   {
-    private readonly DiscordSocketClient _client;
     private readonly IOptionsMonitor<DiscordBotOptions> _options;
 
     public ReactionModule(
       ILogger<ReactionModule> logger,
       IOptionsMonitor<DiscordBotOptions> options,
       DiscordSocketClient client
-    ) : base(options, logger)
+    ) : base(options, logger, client)
     {
       _options = options;
-      _client = client;
     }
 
     protected override Task InitializeAsyncInternal()
@@ -31,18 +29,18 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     protected override void Enable()
     {
-      _client.ReactionAdded += ReactionAddedAsync;
-      _client.ReactionRemoved += ReactionRemovedAsync;
+      Client.ReactionAdded += ReactionAddedAsync;
+      Client.ReactionRemoved += ReactionRemovedAsync;
 
-      _client.GuildAvailable += DiscordClientGuildAvailable;
+      Client.GuildAvailable += DiscordClientGuildAvailable;
     }
 
     protected override void Disable()
     {
-      _client.ReactionAdded -= ReactionAddedAsync;
-      _client.ReactionRemoved -= ReactionRemovedAsync;
+      Client.ReactionAdded -= ReactionAddedAsync;
+      Client.ReactionRemoved -= ReactionRemovedAsync;
 
-      _client.GuildAvailable -= DiscordClientGuildAvailable;
+      Client.GuildAvailable -= DiscordClientGuildAvailable;
     }
 
     protected override IEnableableModuleConfiguration IsEnabledAccessor(DiscordBotOptions options)

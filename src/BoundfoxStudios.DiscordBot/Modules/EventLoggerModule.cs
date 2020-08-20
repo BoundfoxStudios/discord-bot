@@ -16,7 +16,6 @@ namespace BoundfoxStudios.DiscordBot.Modules
   [UsedImplicitly]
   public class EventLoggerModule : EnableableModule
   {
-    private readonly DiscordSocketClient _client;
     private readonly CommandService _commandService;
 
     public EventLoggerModule(
@@ -25,9 +24,8 @@ namespace BoundfoxStudios.DiscordBot.Modules
       CommandService commandService,
       IOptionsMonitor<DiscordBotOptions> options
     )
-      : base(options, logger)
+      : base(options, logger, client)
     {
-      _client = client;
       _commandService = commandService;
     }
 
@@ -38,40 +36,40 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     protected override void Enable()
     {
-      _client.Log += LogDiscordLogAsync;
+      Client.Log += LogDiscordLogAsync;
       _commandService.Log += LogDiscordLogAsync;
 
-      _client.ChannelCreated += LogChannelCreatedAsync;
-      _client.ChannelDestroyed += LogChannelDestroyedAsync;
-      _client.GuildMemberUpdated += LogGuildMemberUpdatedAsync;
-      _client.UserJoined += LogUserJoinedAsync;
-      _client.UserLeft += LogUserLeftAsync;
-      _client.UserBanned += LogUserBannedAsync;
-      _client.UserUnbanned += LogUserUnbannedAsync;
-      _client.MessageDeleted += LogMessageDeletedAsync;
-      _client.MessageUpdated += LogMessageUpdatedAsync;
-      _client.RoleCreated += LogRoleCreatedAsync;
-      _client.RoleDeleted += LogRoleDeletedAsync;
-      _client.MessageReceived += LogPrivateMessagesAsync;
+      Client.ChannelCreated += LogChannelCreatedAsync;
+      Client.ChannelDestroyed += LogChannelDestroyedAsync;
+      Client.GuildMemberUpdated += LogGuildMemberUpdatedAsync;
+      Client.UserJoined += LogUserJoinedAsync;
+      Client.UserLeft += LogUserLeftAsync;
+      Client.UserBanned += LogUserBannedAsync;
+      Client.UserUnbanned += LogUserUnbannedAsync;
+      Client.MessageDeleted += LogMessageDeletedAsync;
+      Client.MessageUpdated += LogMessageUpdatedAsync;
+      Client.RoleCreated += LogRoleCreatedAsync;
+      Client.RoleDeleted += LogRoleDeletedAsync;
+      Client.MessageReceived += LogPrivateMessagesAsync;
     }
 
     protected override void Disable()
     {
-      _client.Log -= LogDiscordLogAsync;
+      Client.Log -= LogDiscordLogAsync;
       _commandService.Log -= LogDiscordLogAsync;
 
-      _client.ChannelCreated -= LogChannelCreatedAsync;
-      _client.ChannelDestroyed -= LogChannelDestroyedAsync;
-      _client.GuildMemberUpdated -= LogGuildMemberUpdatedAsync;
-      _client.UserJoined -= LogUserJoinedAsync;
-      _client.UserLeft -= LogUserLeftAsync;
-      _client.UserBanned -= LogUserBannedAsync;
-      _client.UserUnbanned -= LogUserUnbannedAsync;
-      _client.MessageDeleted -= LogMessageDeletedAsync;
-      _client.MessageUpdated -= LogMessageUpdatedAsync;
-      _client.RoleCreated -= LogRoleCreatedAsync;
-      _client.RoleDeleted -= LogRoleDeletedAsync;
-      _client.MessageReceived -= LogPrivateMessagesAsync;
+      Client.ChannelCreated -= LogChannelCreatedAsync;
+      Client.ChannelDestroyed -= LogChannelDestroyedAsync;
+      Client.GuildMemberUpdated -= LogGuildMemberUpdatedAsync;
+      Client.UserJoined -= LogUserJoinedAsync;
+      Client.UserLeft -= LogUserLeftAsync;
+      Client.UserBanned -= LogUserBannedAsync;
+      Client.UserUnbanned -= LogUserUnbannedAsync;
+      Client.MessageDeleted -= LogMessageDeletedAsync;
+      Client.MessageUpdated -= LogMessageUpdatedAsync;
+      Client.RoleCreated -= LogRoleCreatedAsync;
+      Client.RoleDeleted -= LogRoleDeletedAsync;
+      Client.MessageReceived -= LogPrivateMessagesAsync;
     }
 
     protected override IEnableableModuleConfiguration IsEnabledAccessor(DiscordBotOptions options)
@@ -160,7 +158,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
     {
       var builder = CreateDefaultEmbedBuilder()
         .WithAuthor(guild.Name, guild.IconUrl)
-        .WithBoldDescription($"{MentionUtils.MentionUser(user.Id)} {user.Username} banned.")
+        .WithBoldDescription($"{MentionUtils.MentionUser(user.Id)} {user.Username} unbanned.")
         .WithFooter($"User ID: {user.Id}");
 
       await LogInformationAsync(builder);
@@ -322,7 +320,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
     {
       messageChannel = null;
       var channelId = Options.CurrentValue.LogChannelId;
-      var channel = _client.GetChannel(channelId);
+      var channel = Client.GetChannel(channelId);
 
       if (channel is IMessageChannel msgChannel)
       {
