@@ -1,4 +1,4 @@
-namespace BoundfoxStudios.DiscordBot.DTOs
+namespace BoundfoxStudios.Data.DTOs
 {
   public class LinkDto
   {

@@ -16,4 +16,8 @@
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.6" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\BoundfoxStudios.Data\BoundfoxStudios.Data.csproj" />
+    </ItemGroup>
+
 </Project>

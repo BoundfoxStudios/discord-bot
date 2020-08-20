@@ -5,18 +5,9 @@ namespace BoundfoxStudios.DiscordBot
   public class DiscordBotOptions
   {
     public string Token { get; set; }
+    public ulong LogChannelId { get; set; }
     public ReactionManagerOptions ReactionManager { get; set; }
-    public CommandsConfiguration Commands { get; set; }
-  }
-
-  public class CommandsConfiguration
-  {
-    public class LinkCommandConfiguration
-    {
-      public IReadOnlyCollection<string> DefaultCategories { get; set; }
-    } 
-    
-    public LinkCommandConfiguration Links { get; set; }
+    public int MessageCacheSize { get; set; }
   }
 
   public class ReactionManagerOptions

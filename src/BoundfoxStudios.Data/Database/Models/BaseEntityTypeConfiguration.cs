@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BoundfoxStudios.DiscordBot.Database.Models
+namespace BoundfoxStudios.Data.Database.Models
 {
   public abstract class BaseEntityTypeConfiguration<T> : IEntityTypeConfiguration<T>
     where T : BaseEntity

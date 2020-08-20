@@ -1,4 +1,4 @@
-namespace BoundfoxStudios.DiscordBot.Database.Models
+namespace BoundfoxStudios.Data.Database.Models
 {
   public class LinkModel : BaseEntity
   {

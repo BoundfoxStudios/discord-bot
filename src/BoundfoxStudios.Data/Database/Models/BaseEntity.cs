@@ -1,6 +1,6 @@
 using System;
 
-namespace BoundfoxStudios.DiscordBot.Database.Models
+namespace BoundfoxStudios.Data.Database.Models
 {
   public abstract class BaseEntity
   {
