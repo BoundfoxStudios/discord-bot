@@ -16,7 +16,7 @@ namespace BoundfoxStudios.DiscordBot
       ILogger<DiscordBot> logger, // it should log in the context of the DiscordBot
       DiscordSocketClient client,
       ReactionManager reactionManager
-      )
+    )
     {
       _client = client;
       _reactionManager = reactionManager;
@@ -25,8 +25,6 @@ namespace BoundfoxStudios.DiscordBot
 
     public void Initialize()
     {
-      _client.Log += DiscordClientLogAsync;
-
       _client.Ready += DiscordClientReadyAsync;
 
       _client.ReactionAdded += DiscordClientReactionAddedAsync;
@@ -58,14 +56,14 @@ namespace BoundfoxStudios.DiscordBot
     {
       // TODO: where do we get the version from?
       _logger.LogInformation("Setting status...");
-      await _client.SetGameAsync("!info | v0.1");
-    }
 
-    private Task DiscordClientLogAsync(LogMessage logMessage)
-    {
-      _logger.Log(logMessage.Severity.ToLogLevel(), logMessage.Exception, logMessage.Message);
+      var version = "v0.1";
 
-      return Task.CompletedTask;
+#if DEBUG
+      version += "-debug";
+#endif
+
+      await _client.SetGameAsync($"!info | {version}");
     }
   }
 }

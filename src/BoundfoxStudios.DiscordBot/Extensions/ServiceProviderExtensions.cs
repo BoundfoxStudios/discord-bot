@@ -1,9 +1,10 @@
+using System;
 using BoundfoxStudios.DiscordBot.Commands;
 using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace BoundfoxStudios.DiscordBot.Extensions
 {
@@ -15,11 +16,22 @@ namespace BoundfoxStudios.DiscordBot.Extensions
       services.AddHostedService<DiscordBotHost>();
 
       services.AddSingleton<DiscordBot>();
-      services.AddSingleton<DiscordSocketClient>();
+      services.AddSingleton(DiscordSocketClientFactory);
       services.AddSingleton<CommandHandler>();
       services.AddSingleton<CommandService>();
       services.AddSingleton<EventHandler>();
+      services.AddSingleton<EventLogger>();
       services.AddSingleton<ReactionManager>();
+    }
+
+    private static DiscordSocketClient DiscordSocketClientFactory(IServiceProvider serviceProvider)
+    {
+      var options = serviceProvider.GetRequiredService<IOptions<DiscordBotOptions>>();
+
+      return new DiscordSocketClient(new DiscordSocketConfig
+      {
+        MessageCacheSize = options.Value.MessageCacheSize
+      });
     }
   }
 }
