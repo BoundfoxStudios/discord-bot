@@ -1,44 +1,36 @@
 using System.Threading.Tasks;
-using BoundfoxStudios.DiscordBot.Database.Models;
+using BoundfoxStudios.Data.Database;
+using BoundfoxStudios.Data.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace BoundfoxStudios.DiscordBot.Database
+namespace BoundfoxStudios.Data.Services
 {
-  public class DatabaseSeeder
+  public class LinkSeeder : IDataSeed
   {
+    private readonly ILogger<LinkSeeder> _logger;
     private readonly BotDbContext _botDbContext;
-    private readonly ILogger<DatabaseSeeder> _logger;
-    private readonly IOptions<DiscordBotOptions> _options;
+    private readonly IOptions<DataOptions> _options;
 
-    public DatabaseSeeder(
-      BotDbContext botDbContext, 
-      IOptions<DiscordBotOptions> options,
-      ILogger<DatabaseSeeder> logger
-      )
+    public LinkSeeder(ILogger<LinkSeeder> logger, BotDbContext botDbContext, IOptions<DataOptions> options)
     {
-      _botDbContext = botDbContext;
       _logger = logger;
+      _botDbContext = botDbContext;
       _options = options;
     }
-
+    
     public async Task SeedAsync()
-    {
-      await SeedLinkCommandAsync();
-    }
-
-    private async Task SeedLinkCommandAsync()
     {
       _logger.LogInformation("Seeding link command...");
       
-      if (_options.Value?.Commands?.Links?.DefaultCategories == null)
+      if (_options.Value?.Links?.DefaultCategories == null)
       {
         return;
       }
 
       // TODO: Should this go into the linksservice?
-      foreach (var category in _options.Value.Commands.Links.DefaultCategories)
+      foreach (var category in _options.Value.Links.DefaultCategories)
       {
         if (await _botDbContext.LinkCategories.AnyAsync(p => p.Name == category))
         {

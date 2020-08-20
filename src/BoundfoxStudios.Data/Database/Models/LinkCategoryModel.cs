@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BoundfoxStudios.DiscordBot.Database.Models
+namespace BoundfoxStudios.Data.Database.Models
 {
   public class LinkCategoryModel : BaseEntity
   {

@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BoundfoxStudios.Data\BoundfoxStudios.Data.csproj" />
       <ProjectReference Include="..\BoundfoxStudios.DiscordBot\BoundfoxStudios.DiscordBot.csproj" />
     </ItemGroup>
 

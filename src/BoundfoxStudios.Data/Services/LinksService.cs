@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using BoundfoxStudios.DiscordBot.Database;
-using BoundfoxStudios.DiscordBot.DTOs;
 using System.Linq;
-using BoundfoxStudios.DiscordBot.Database.Models;
-using Discord.Commands;
+using System.Threading.Tasks;
+using BoundfoxStudios.Data.Database;
+using BoundfoxStudios.Data.Database.Models;
+using BoundfoxStudios.Data.DTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace BoundfoxStudios.DiscordBot.Services
+namespace BoundfoxStudios.Data.Services
 {
   public class LinksService
   {

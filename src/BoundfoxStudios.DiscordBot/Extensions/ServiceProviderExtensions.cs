@@ -1,11 +1,13 @@
+using System;
+using System.Linq;
+using System.Reflection;
 using BoundfoxStudios.DiscordBot.Commands;
-using BoundfoxStudios.DiscordBot.Database;
-using BoundfoxStudios.DiscordBot.Services;
+using BoundfoxStudios.DiscordBot.Modules;
 using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace BoundfoxStudios.DiscordBot.Extensions
 {
@@ -14,21 +16,37 @@ namespace BoundfoxStudios.DiscordBot.Extensions
     public static void AddDiscordBot(this IServiceCollection services, IConfiguration configureSection)
     {
       services.AddOptions<DiscordBotOptions>().Bind(configureSection);
-
-      services.AddDbContext<BotDbContext>(options => options.UseSqlite(configureSection.GetValue<string>("SqliteConnection")));
-
       services.AddHostedService<DiscordBotHost>();
 
       services.AddSingleton<DiscordBot>();
-      services.AddSingleton<DiscordSocketClient>();
+      services.AddSingleton(DiscordSocketClientFactory);
       services.AddSingleton<CommandHandler>();
       services.AddSingleton<CommandService>();
-      services.AddSingleton<EventHandler>();
-      services.AddSingleton<ReactionManager>();
-      
-      services.AddTransient<DatabaseMigrator>();
-      services.AddTransient<DatabaseSeeder>();
-      services.AddTransient<LinksService>();
+
+      RegisterModules(services);
+    }
+
+    private static void RegisterModules(IServiceCollection services)
+    {
+      var modules = Assembly.GetExecutingAssembly().DefinedTypes
+        .Where(type => type.ImplementedInterfaces.Contains(typeof(IModule)))
+        .Where(type => !type.IsAbstract)
+        .ToList();
+
+      foreach (var module in modules)
+      {
+        services.AddSingleton(typeof(IModule), module);
+      }
+    }
+
+    private static DiscordSocketClient DiscordSocketClientFactory(IServiceProvider serviceProvider)
+    {
+      var options = serviceProvider.GetRequiredService<IOptions<DiscordBotOptions>>();
+
+      return new DiscordSocketClient(new DiscordSocketConfig
+      {
+        MessageCacheSize = options.Value.MessageCacheSize
+      });
     }
   }
 }

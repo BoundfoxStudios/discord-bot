@@ -4,5 +4,5 @@ MIGRATION_NAME=$1
 
 dotnet ef migrations add "$MIGRATION_NAME" \
   --startup-project ./BoundfoxStudios.Host/BoundfoxStudios.Host.csproj \
-  --project ./BoundfoxStudios.DiscordBot/BoundfoxStudios.DiscordBot.csproj \
+  --project ./BoundfoxStudios.Data/BoundfoxStudios.Data.csproj \
   

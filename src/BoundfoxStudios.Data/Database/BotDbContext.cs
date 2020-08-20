@@ -3,10 +3,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using BoundfoxStudios.DiscordBot.Database.Models;
+using BoundfoxStudios.Data.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BoundfoxStudios.DiscordBot.Database
+namespace BoundfoxStudios.Data.Database
 {
   public class BotDbContext : DbContext
   {
