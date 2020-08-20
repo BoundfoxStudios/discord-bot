@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BoundfoxStudios.DiscordBot.Commands;
 using BoundfoxStudios.DiscordBot.Modules;
@@ -15,30 +16,30 @@ namespace BoundfoxStudios.DiscordBot
     private readonly IOptionsMonitor<DiscordBotOptions> _optionsMonitor;
     private readonly DiscordSocketClient _client;
     private readonly CommandHandler _commandHandler;
-    private readonly EventHandler _eventHandler;
-    private readonly EventLoggerModule _eventLoggerModule;
+    private readonly IEnumerable<IModule> _modules;
 
     public DiscordBot(
       ILogger<DiscordBot> logger,
       IOptionsMonitor<DiscordBotOptions> optionsMonitor,
       DiscordSocketClient discordSocketClient,
       CommandHandler commandHandler,
-      EventHandler eventHandler,
-      EventLoggerModule eventLoggerModule
+      IEnumerable<IModule> modules
     )
     {
       _logger = logger;
       _optionsMonitor = optionsMonitor;
       _client = discordSocketClient;
       _commandHandler = commandHandler;
-      _eventHandler = eventHandler;
-      _eventLoggerModule = eventLoggerModule;
+      _modules = modules;
     }
 
     public async Task StartAsync()
     {
-      _eventLoggerModule.Initialize();
-      _eventHandler.Initialize();
+      foreach (var module in _modules)
+      {
+        _logger.LogInformation($"Initializing {module.GetType().Name}...");
+        await module.InitializeAsync();
+      }
       
       await _commandHandler.InitializeAsync();
       await LoginAsync();

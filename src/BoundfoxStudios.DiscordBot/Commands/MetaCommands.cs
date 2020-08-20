@@ -2,9 +2,11 @@ using System.Threading.Tasks;
 using BoundfoxStudios.DiscordBot.Extensions;
 using Discord;
 using Discord.Commands;
+using JetBrains.Annotations;
 
 namespace BoundfoxStudios.DiscordBot.Commands
 {
+  [PublicAPI]
   public class MetaCommands : ModuleBase<ICommandContext>
   {
     [Command("info", true)]
