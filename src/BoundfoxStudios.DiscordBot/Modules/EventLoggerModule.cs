@@ -118,7 +118,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
     {
       var message = await deletedMessage.GetOrDownloadAsync();
 
-      if (message.Author.IsBot)
+      if (IsUserMessage(message.Author))
       {
         return;
       }
@@ -133,7 +133,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     private async Task LogMessageUpdatedAsync(Cacheable<IMessage, ulong> cachedOldMessage, SocketMessage newMessage, ISocketMessageChannel channel)
     {
-      if (newMessage.Author.IsBot)
+      if (IsUserMessage(newMessage.Author))
       {
         return;
       }
@@ -144,6 +144,12 @@ namespace BoundfoxStudios.DiscordBot.Modules
       }
 
       var oldMessage = await cachedOldMessage.GetOrDownloadAsync();
+      
+      if (oldMessage.Content == newMessage.Content)
+      {
+        // an embed has been changed, no need to log that
+        return;
+      }
 
       var serverId = guildChannel.Guild.Id;
 
@@ -336,6 +342,11 @@ namespace BoundfoxStudios.DiscordBot.Modules
       Logger.Log(logMessage.Severity.ToLogLevel(), logMessage.Exception, "{0}: {1}", logMessage.Source, logMessage.Message);
 
       return Task.CompletedTask;
+    }
+
+    private bool IsUserMessage(IUser user)
+    {
+      return !user.IsBot && !user.IsWebhook;
     }
   }
 }
