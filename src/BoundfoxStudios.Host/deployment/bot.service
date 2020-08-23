@@ -3,7 +3,11 @@ Description=Boundfox Studios Bot
 
 [Service]
 Type=notify
+WorkingDirectory=/root/bot/live
 ExecStart=/root/bot/live/BoundfoxStudios.Host
+
+KillSignal=SIGINT
+Environment=ASPNETCORE_ENVIRONMENT=Production
 
 [Install]
 WantedBy=multi-user.target
