@@ -1,0 +1,9 @@
+[Unit]
+Description=Boundfox Studios Bot
+
+[Service]
+Type=notify
+ExecStart=/root/bot/live/BoundfoxStudios.Host
+
+[Install]
+WantedBy=multi-user.target
