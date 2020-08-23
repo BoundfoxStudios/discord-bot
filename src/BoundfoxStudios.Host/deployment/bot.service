@@ -6,6 +6,9 @@ Type=notify
 WorkingDirectory=/root/bot/live
 ExecStart=/root/bot/live/BoundfoxStudios.Host
 
+Restart=always
+RestartSec=5
+
 KillSignal=SIGINT
 Environment=ASPNETCORE_ENVIRONMENT=Production
 
