@@ -118,7 +118,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
     {
       var message = await deletedMessage.GetOrDownloadAsync();
 
-      if (IsUserMessage(message.Author))
+      if (!IsUserMessage(message.Author))
       {
         return;
       }
@@ -133,7 +133,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     private async Task LogMessageUpdatedAsync(Cacheable<IMessage, ulong> cachedOldMessage, SocketMessage newMessage, ISocketMessageChannel channel)
     {
-      if (IsUserMessage(newMessage.Author))
+      if (!IsUserMessage(newMessage.Author))
       {
         return;
       }
