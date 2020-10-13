@@ -33,6 +33,7 @@ namespace BoundfoxStudios.DiscordBot
       public ulong WelcomeChannelId { get; set; }
       public bool IsEnabled { get; set; }
       public ulong RulesChannelId { get; set; }
+      public ulong RolesChannelId { get; set; }
     }
 
     public class ReactionModuleConfiguration : IEnableableModuleConfiguration

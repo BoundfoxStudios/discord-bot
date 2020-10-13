@@ -28,8 +28,9 @@ namespace BoundfoxStudios.DiscordBot.Modules
       }
 
       var rulesChannelId = Options.CurrentValue.Modules.Welcome.RulesChannelId;
+      var rolesChannelId = Options.CurrentValue.Modules.Welcome.RolesChannelId;
       
-      await channel.SendMessageAsync($"Hi {MentionUtils.MentionUser(user.Id)}! Welcome to Boundfox Studios. Please read the {MentionUtils.MentionChannel(rulesChannelId)} and accept them. After that, you'll gain full access to the server. :-)");
+      await channel.SendMessageAsync($"Hi {MentionUtils.MentionUser(user.Id)}! Welcome to Boundfox Studios. Please read the {MentionUtils.MentionChannel(rulesChannelId)} and accept them. After that, you'll gain full access to the server. And don't forget to set your own roles in {MentionUtils.MentionChannel(rolesChannelId)}. :-)");
     }
 
     protected override void Disable()
