@@ -32,7 +32,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
       // TODO: where do we get the version from?
       _logger.LogInformation("Setting status...");
 
-      var version = "v0.3.2";
+      var version = "v0.3.3";
 
 #if DEBUG
       version += "-debug";
