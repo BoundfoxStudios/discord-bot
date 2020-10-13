@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BoundfoxStudios.DiscordBot.Extensions;
+using BoundfoxStudios.DiscordBot.Services;
 using BoundfoxStudios.DiscordBot.Utils;
 using Discord;
 using Discord.Commands;
@@ -17,16 +18,19 @@ namespace BoundfoxStudios.DiscordBot.Modules
   public class EventLoggerModule : EnableableModule
   {
     private readonly CommandService _commandService;
+    private readonly ChannelLogger _channelLogger;
 
     public EventLoggerModule(
-      ILogger<EventLoggerModule> logger, // it should log in the context of the DiscordBot
+      ILogger<EventLoggerModule> logger,
       DiscordSocketClient client,
       CommandService commandService,
-      IOptionsMonitor<DiscordBotOptions> options
+      IOptionsMonitor<DiscordBotOptions> options,
+      ChannelLogger channelLogger
     )
       : base(options, logger, client)
     {
       _commandService = commandService;
+      _channelLogger = channelLogger;
     }
 
     protected override Task InitializeAsyncInternal()
@@ -79,6 +83,11 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     private async Task LogPrivateMessagesAsync(SocketMessage message)
     {
+      if (!IsUserMessage(message.Author))
+      {
+        return;
+      }
+      
       if (Options.CurrentValue.Modules?.EventLogger == null || !Options.CurrentValue.Modules.EventLogger.LogPrivateMessages)
       {
         return;
@@ -316,25 +325,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
           (s, fieldBuilder) => $"{s} | {fieldBuilder.Name} ({fieldBuilder.Value})")
       );
 
-      if (TryGetMessageChannel(out var messageChannel))
-      {
-        await messageChannel.SendMessageAsync(embed: builder.Build());
-      }
-    }
-
-    private bool TryGetMessageChannel(out IMessageChannel messageChannel)
-    {
-      messageChannel = null;
-      var channelId = Options.CurrentValue.LogChannelId;
-      var channel = Client.GetChannel(channelId);
-
-      if (channel is IMessageChannel msgChannel)
-      {
-        messageChannel = msgChannel;
-        return true;
-      }
-
-      return false;
+      await _channelLogger.LogAsync(builder);
     }
 
     private Task LogDiscordLogAsync(LogMessage logMessage)

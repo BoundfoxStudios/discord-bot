@@ -12,6 +12,7 @@ namespace BoundfoxStudios.Data.Database
   {
     public DbSet<LinkCategoryModel> LinkCategories { get; set; }
     public DbSet<LinkModel> Links { get; set; }
+    public DbSet<UserReminderModel> UserReminders { get; set; }
     
     public BotDbContext(DbContextOptions<BotDbContext> options)
       : base(options) { }

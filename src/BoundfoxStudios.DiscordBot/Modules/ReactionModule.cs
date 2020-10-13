@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using BoundfoxStudios.DiscordBot.Services;
 using Discord;
 using Discord.WebSocket;
 using JetBrains.Annotations;
@@ -12,14 +13,17 @@ namespace BoundfoxStudios.DiscordBot.Modules
   public class ReactionModule : EnableableModule
   {
     private readonly IOptionsMonitor<DiscordBotOptions> _options;
+    private readonly ReactionService _reactionService;
 
     public ReactionModule(
       ILogger<ReactionModule> logger,
       IOptionsMonitor<DiscordBotOptions> options,
-      DiscordSocketClient client
+      DiscordSocketClient client,
+      ReactionService reactionService
     ) : base(options, logger, client)
     {
       _options = options;
+      _reactionService = reactionService;
     }
 
     protected override Task InitializeAsyncInternal()
@@ -50,7 +54,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     private async Task ReactionAddedAsync(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
     {
-      var (role, user) = Process(message, channel, reaction);
+      var (role, user, _) = _reactionService.Process(message, channel, reaction);
 
       if (role != null && user != null)
       {
@@ -61,39 +65,13 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     private async Task ReactionRemovedAsync(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
     {
-      var (role, user) = Process(message, channel, reaction);
+      var (role, user, _) = _reactionService.Process(message, channel, reaction);
 
       if (role != null && user != null)
       {
         Logger.LogInformation("Removing role {Role} ({RoleId}) from user {User} ({UserId})", role.Name, role.Id, user.Username, user.Id);
         await user.RemoveRoleAsync(role);
       }
-    }
-
-    private (IRole Role, SocketGuildUser User) Process(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
-    {
-      if (!reaction.User.IsSpecified || !(reaction.User.Value is SocketGuildUser guildUser))
-      {
-        Logger.LogWarning("No user specified for for {ChannelId} {MessageId} {Emoji}", channel.Id, message.Id, reaction.Emote.Name);
-        return (null, null);
-      }
-
-      var configuration = GetConfigurationForMessage(reaction.Emote.Name, message.Id, channel.Id);
-
-      if (configuration == null)
-      {
-        Logger.LogWarning("No configuration found for {ChannelId} {MessageId} {Emoji}", channel.Id, message.Id, reaction.Emote.Name);
-        return (null, null);
-      }
-
-      return (guildUser.Guild.GetRole(configuration.RoleId), guildUser);
-    }
-
-    private ModuleConfiguration.ReactionModuleConfiguration.Reaction GetConfigurationForMessage(string emoji, ulong messageId, ulong channelId)
-    {
-      return _options.CurrentValue.Modules.Reactions.Items.SingleOrDefault(
-        reaction => reaction.Emoji == emoji && reaction.MessageId == messageId && reaction.ChannelId == channelId
-      );
     }
 
     private async Task SyncReactionsAsync(IGuild guild)
