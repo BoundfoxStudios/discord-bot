@@ -10,6 +10,7 @@ ProjectSection(SolutionItems) = preProject
 	..\.gitignore = ..\.gitignore
 	add-migration.sh = add-migration.sh
 	NuGet.Config = NuGet.Config
+	global.json = global.json
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoundfoxStudios.Data", "BoundfoxStudios.Data\BoundfoxStudios.Data.csproj", "{1CB2059D-6332-453D-BF9D-5A03EB1BFFBE}"
