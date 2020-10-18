@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace BoundfoxStudios.DiscordBot
@@ -21,6 +22,7 @@ namespace BoundfoxStudios.DiscordBot
     public EventLoggerModuleConfigurationConfiguration EventLogger { get; set; }
     public WelcomeModuleConfigurationConfiguration Welcome { get; set; }
     public ReactionModuleConfiguration Reactions { get; set; }
+    public UserReminderModuleConfiguration UserReminder { get; set; }
 
     public class EventLoggerModuleConfigurationConfiguration : IEnableableModuleConfiguration
     {
@@ -48,7 +50,15 @@ namespace BoundfoxStudios.DiscordBot
         public ulong MessageId { get; set; }
         public ulong RoleId { get; set; }
         public string Emoji { get; set; }
+        public bool RemoveReminder { get; set; }
       }
+    }
+
+    public class UserReminderModuleConfiguration : IEnableableModuleConfiguration
+    {
+      public bool IsEnabled { get; set; }
+      public TimeSpan Period { get; set; }
+      public string LinkToRulesChannel { get; set; }
     }
   }
 }

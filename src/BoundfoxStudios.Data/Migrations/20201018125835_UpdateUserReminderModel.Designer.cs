@@ -3,14 +3,16 @@ using System;
 using BoundfoxStudios.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoundfoxStudios.Data.Migrations
 {
     [DbContext(typeof(BotDbContext))]
-    partial class BotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201018125835_UpdateUserReminderModel")]
+    partial class UpdateUserReminderModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,10 +75,10 @@ namespace BoundfoxStudios.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("JoinedAt")
+                    b.Property<DateTimeOffset>("JoinedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("LastNotificationSentAt")
+                    b.Property<DateTimeOffset?>("LastNotificationSentAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("NumberOfNotificationsSent")

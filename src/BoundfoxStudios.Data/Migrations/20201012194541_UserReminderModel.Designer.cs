@@ -3,18 +3,20 @@ using System;
 using BoundfoxStudios.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoundfoxStudios.Data.Migrations
 {
     [DbContext(typeof(BotDbContext))]
-    partial class BotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201012194541_UserReminderModel")]
+    partial class UserReminderModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.0-rc.2.20475.6");
+                .HasAnnotation("ProductVersion", "3.1.6");
 
             modelBuilder.Entity("BoundfoxStudios.Data.Database.Models.LinkCategoryModel", b =>
                 {
@@ -76,7 +78,7 @@ namespace BoundfoxStudios.Data.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("LastNotificationSentAt")
+                    b.Property<DateTime>("LastNotificationSentAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("NumberOfNotificationsSent")
@@ -103,13 +105,6 @@ namespace BoundfoxStudios.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("BoundfoxStudios.Data.Database.Models.LinkCategoryModel", b =>
-                {
-                    b.Navigation("Links");
                 });
 #pragma warning restore 612, 618
         }

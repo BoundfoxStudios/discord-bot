@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using BoundfoxStudios.DiscordBot.BackgroundServices;
 using BoundfoxStudios.DiscordBot.Commands;
 using BoundfoxStudios.DiscordBot.Modules;
+using BoundfoxStudios.DiscordBot.Services;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -17,11 +19,15 @@ namespace BoundfoxStudios.DiscordBot.Extensions
     {
       services.AddOptions<DiscordBotOptions>().Bind(configureSection);
       services.AddHostedService<DiscordBotHost>();
+      services.AddHostedService<UserReminderBackgroundService>();
 
       services.AddSingleton<DiscordBot>();
       services.AddSingleton(DiscordSocketClientFactory);
       services.AddSingleton<CommandHandler>();
       services.AddSingleton<CommandService>();
+      services.AddSingleton<ChannelLogger>();
+
+      services.AddTransient<ReactionService>();
 
       RegisterModules(services);
     }

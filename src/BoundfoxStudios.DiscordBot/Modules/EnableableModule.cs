@@ -13,7 +13,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
     protected readonly IOptionsMonitor<DiscordBotOptions> Options;
 
     private IDisposable _onChangeHandler;
-    private bool _isEnabled;
+    protected bool IsEnabled { get; private set; }
 
     protected EnableableModule(IOptionsMonitor<DiscordBotOptions> options, ILogger<EnableableModule> logger, DiscordSocketClient client)
     {
@@ -22,7 +22,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
       Client = client;
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
       _onChangeHandler?.Dispose();
     }
@@ -45,18 +45,18 @@ namespace BoundfoxStudios.DiscordBot.Modules
     {
       var newEnabledStatus = IsEnabledAccessor(options).IsEnabled;
 
-      if (_isEnabled && !newEnabledStatus)
+      if (IsEnabled && !newEnabledStatus)
       {
         Logger.LogInformation("Disabling module...");
-        _isEnabled = false;
+        IsEnabled = false;
         Disable();
         return;
       }
 
-      if (!_isEnabled && newEnabledStatus)
+      if (!IsEnabled && newEnabledStatus)
       {
         Logger.LogInformation("Enabling module...");
-        _isEnabled = true;
+        IsEnabled = true;
         Enable();
       }
     }

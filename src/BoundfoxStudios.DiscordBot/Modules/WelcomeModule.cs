@@ -11,7 +11,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
   [UsedImplicitly]
   public class WelcomeModule : EnableableModule
   {
-    public WelcomeModule(IOptionsMonitor<DiscordBotOptions> options, ILogger<EnableableModule> logger, DiscordSocketClient client) : base(options, logger, client) { }
+    public WelcomeModule(IOptionsMonitor<DiscordBotOptions> options, ILogger<WelcomeModule> logger, DiscordSocketClient client) : base(options, logger, client) { }
 
     protected override Task InitializeAsyncInternal() => Task.CompletedTask;
 
