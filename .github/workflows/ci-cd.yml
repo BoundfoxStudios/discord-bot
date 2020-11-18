@@ -20,6 +20,10 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -r linux-x64 -o .deploy 
         working-directory: src/BoundfoxStudios.Host
+        
+      - name: Permissions
+        run: chmod +x ./BoundfoxStudios.Host
+        working-directory: src/BoundfoxStudios.Host
 
       - name: Deploy to Boundfox Studios Root Server
         uses: easingthemes/ssh-deploy@v2.1.2
