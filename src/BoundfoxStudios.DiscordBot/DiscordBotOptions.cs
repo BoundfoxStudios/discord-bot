@@ -36,6 +36,7 @@ namespace BoundfoxStudios.DiscordBot
       public bool IsEnabled { get; set; }
       public ulong RulesChannelId { get; set; }
       public ulong RolesChannelId { get; set; }
+      public ulong AnnouncementChannelId { get; set; }
     }
 
     public class ReactionModuleConfiguration : IEnableableModuleConfiguration
@@ -58,7 +59,7 @@ namespace BoundfoxStudios.DiscordBot
     {
       public bool IsEnabled { get; set; }
       public TimeSpan Period { get; set; }
-      public string LinkToRulesChannel { get; set; }
+      public ulong RulesChannelId { get; set; }
     }
   }
 }

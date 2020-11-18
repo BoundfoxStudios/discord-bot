@@ -87,7 +87,7 @@ namespace BoundfoxStudios.DiscordBot.BackgroundServices
               var message = $"{TextUtils.Bold($"Hi {user.Username}!")}! :-)\n\nYou've joined the {TextUtils.Bold("Boundfox Studios")} Discord Server on " +
                             $"{TextUtils.Italic(reminderToSend.JoinedAt.ToString("yyyy-MM-dd hh:mm"))} and we're {TextUtils.Bold("happy")} to have you!\n\n" +
                             $"However, you've not accepted the rules yet. :-( Without them, you're not able to see all channels and interact with our lovely community.\n\n" +
-                            $"Please find the rules channel here: {_optionsMonitor.CurrentValue.Modules.UserReminder.LinkToRulesChannel}.\n\n" +
+                            $"Please find the rules channel here: {MentionUtils.MentionChannel(_optionsMonitor.CurrentValue.Modules.UserReminder.RulesChannelId)}.\n\n" +
                             $"See you soon!\n\n" +
                             $"{TextUtils.Italic($"This is reminder {reminderToSend.NumberOfNotificationsSent + 1}/3")}\n" +
                             $"{TextUtils.Spoiler("I'm a bot, please do not respond to me, since I can not read your message.")}";
