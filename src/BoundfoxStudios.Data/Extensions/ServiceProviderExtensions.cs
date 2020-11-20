@@ -19,6 +19,7 @@ namespace BoundfoxStudios.Data.Extensions
       services.AddTransient<DatabaseSeeder>();
       services.AddTransient<LinksService>();
       services.AddTransient<UserReminderService>();
+      services.AddTransient<StatisticsService>();
     }
   }
 }
