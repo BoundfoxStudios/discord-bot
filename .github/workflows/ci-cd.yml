@@ -23,7 +23,7 @@ jobs:
         
       - name: Permissions
         run: chmod +x ./BoundfoxStudios.Host
-        working-directory: src/BoundfoxStudios.Host
+        working-directory: src/BoundfoxStudios.Host/.deploy
 
       - name: Deploy to Boundfox Studios Root Server
         uses: easingthemes/ssh-deploy@v2.1.2
