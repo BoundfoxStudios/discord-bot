@@ -5,6 +5,7 @@ using BoundfoxStudios.Data.Services;
 using BoundfoxStudios.DiscordBot.Extensions;
 using BoundfoxStudios.DiscordBot.Services;
 using BoundfoxStudios.DiscordBot.Utils;
+using Cronos;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,8 @@ namespace BoundfoxStudios.DiscordBot.BackgroundServices
     private readonly IDisposable _onChangeHandler;
     private bool IsEnabled { get; set; }
 
+    private CronExpression _cronExpression;
+
     public UserReminderBackgroundService(
       ILogger<UserReminderBackgroundService> logger,
       IOptionsMonitor<DiscordBotOptions> optionsMonitor,
@@ -34,32 +37,49 @@ namespace BoundfoxStudios.DiscordBot.BackgroundServices
 
       _onChangeHandler = optionsMonitor.OnChange(options =>
       {
+        _cronExpression = LoadCronExpression(options.Modules.UserReminder);
         IsEnabled = options.Modules.UserReminder.IsEnabled;
         _logger.LogInformation("Setting new enabled state: {0}", IsEnabled);
       });
 
+      _cronExpression = LoadCronExpression(optionsMonitor.CurrentValue.Modules.UserReminder);
       IsEnabled = optionsMonitor.CurrentValue.Modules.UserReminder.IsEnabled;
       _logger.LogInformation("Setting new enabled state: {0}", IsEnabled);
     }
 
+    private CronExpression LoadCronExpression(ModuleConfiguration.UserReminderModuleConfiguration configuration)
+    {
+      return CronExpression.Parse(configuration.CronExpression);
+    }
+
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-      var period = _optionsMonitor.CurrentValue.Modules.UserReminder.Period;
+      var cronExpression = _optionsMonitor.CurrentValue.Modules.UserReminder.CronExpression;
 
-      _logger.LogInformation("Setup periodic user reminder check with time {0}", period);
+      _logger.LogInformation("Setup periodic user reminder check with CronExpression {0}", cronExpression);
 
-      Task.Run(() => PeriodicUserReminderCheck(stoppingToken), stoppingToken);
+      Task.Run(() => PeriodicUserReminderCheckAsync(stoppingToken), stoppingToken);
 
       return Task.CompletedTask;
     }
 
-    private async void PeriodicUserReminderCheck(CancellationToken cancellationToken)
+    private async void PeriodicUserReminderCheckAsync(CancellationToken cancellationToken)
     {
       try
       {
         while (!cancellationToken.IsCancellationRequested)
         {
-          await Task.Delay(_optionsMonitor.CurrentValue.Modules.UserReminder.Period, cancellationToken);
+          var waitTimeInMilliseconds = _cronExpression.GetNextWaitTime();
+
+          if (!waitTimeInMilliseconds.HasValue)
+          {
+            _logger.LogInformation("Could not get wait time. Waiting 30 minutes before retrying...");
+            await Task.Delay(TimeSpan.FromMinutes(30), cancellationToken);
+            continue;
+          }
+          
+          _logger.LogInformation("Will run in {0:0.00} minutes", TimeSpan.FromMilliseconds(waitTimeInMilliseconds.Value).TotalMinutes);
+          await Task.Delay(waitTimeInMilliseconds.Value, cancellationToken);
 
           cancellationToken.ThrowIfCancellationRequested();
 
@@ -102,7 +122,7 @@ namespace BoundfoxStudios.DiscordBot.BackgroundServices
               );
             }
           }
-
+          
           _logger.LogInformation("Finished periodic user reminder check.");
         }
       }

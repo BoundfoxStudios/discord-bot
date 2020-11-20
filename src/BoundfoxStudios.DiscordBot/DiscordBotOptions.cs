@@ -23,6 +23,7 @@ namespace BoundfoxStudios.DiscordBot
     public WelcomeModuleConfigurationConfiguration Welcome { get; set; }
     public ReactionModuleConfiguration Reactions { get; set; }
     public UserReminderModuleConfiguration UserReminder { get; set; }
+    public StatisticsModuleConfiguration Statistics { get; set; }
 
     public class EventLoggerModuleConfigurationConfiguration : IEnableableModuleConfiguration
     {
@@ -58,8 +59,14 @@ namespace BoundfoxStudios.DiscordBot
     public class UserReminderModuleConfiguration : IEnableableModuleConfiguration
     {
       public bool IsEnabled { get; set; }
-      public TimeSpan Period { get; set; }
+      public string CronExpression { get; set; }
       public ulong RulesChannelId { get; set; }
+    }
+
+    public class StatisticsModuleConfiguration : IEnableableModuleConfiguration
+    {
+      public bool IsEnabled { get; set; }
+      public string CronExpression { get; set; }
     }
   }
 }
