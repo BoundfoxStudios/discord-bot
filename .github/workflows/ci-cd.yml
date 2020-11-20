@@ -22,7 +22,7 @@ jobs:
         working-directory: src/BoundfoxStudios.Host
         
       - name: Permissions
-        run: chmod +x ./BoundfoxStudios.Host
+        run: chmod +x BoundfoxStudios.Host
         working-directory: src/BoundfoxStudios.Host
 
       - name: Deploy to Boundfox Studios Root Server
