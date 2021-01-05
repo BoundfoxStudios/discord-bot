@@ -13,6 +13,7 @@ namespace BoundfoxStudios.DiscordBot
     public string Token { get; set; }
     public ulong LogChannelId { get; set; }
     public int MessageCacheSize { get; set; }
+    public bool AlwaysDownloadUsers { get; set; }
 
     public ModuleConfiguration Modules { get; set; }
   }

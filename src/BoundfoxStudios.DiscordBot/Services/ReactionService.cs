@@ -21,7 +21,7 @@ namespace BoundfoxStudios.DiscordBot.Services
     {
       if (!reaction.User.IsSpecified || !(reaction.User.Value is SocketGuildUser guildUser))
       {
-        _logger.LogWarning("No user specified for for {ChannelId} {MessageId} {Emoji}", channel.Id, message.Id, reaction.Emote.Name);
+        _logger.LogWarning("No user specified for {ChannelId} {MessageId} {Emoji}", channel.Id, message.Id, reaction.Emote.Name);
         return (null, null, null);
       }
 
