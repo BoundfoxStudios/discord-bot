@@ -52,7 +52,8 @@ namespace BoundfoxStudios.DiscordBot.Extensions
 
       return new DiscordSocketClient(new DiscordSocketConfig
       {
-        MessageCacheSize = options.Value.MessageCacheSize
+        MessageCacheSize = options.Value.MessageCacheSize,
+        AlwaysDownloadUsers = options.Value.AlwaysDownloadUsers // TODO: Change when Boundfox Studios Discord Server has too much members.
       });
     }
   }
