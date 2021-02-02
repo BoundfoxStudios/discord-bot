@@ -3,14 +3,16 @@ using System;
 using BoundfoxStudios.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoundfoxStudios.Data.Migrations
 {
     [DbContext(typeof(BotDbContext))]
-    partial class BotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210202064034_AddYouTubeNotifications")]
+    partial class AddYouTubeNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,9 +162,6 @@ namespace BoundfoxStudios.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HasBeenSentToDiscord");
-
-                    b.HasIndex("VideoId")
-                        .IsUnique();
 
                     b.ToTable("YouTubeNotifications");
                 });

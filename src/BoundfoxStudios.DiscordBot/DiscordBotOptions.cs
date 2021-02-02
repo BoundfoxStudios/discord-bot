@@ -25,6 +25,7 @@ namespace BoundfoxStudios.DiscordBot
     public ReactionModuleConfiguration Reactions { get; set; }
     public UserReminderModuleConfiguration UserReminder { get; set; }
     public StatisticsModuleConfiguration Statistics { get; set; }
+    public YouTubeNotificationsModuleConfiguration YouTubeNotifications { get; set; }
 
     public class EventLoggerModuleConfigurationConfiguration : IEnableableModuleConfiguration
     {
@@ -68,6 +69,14 @@ namespace BoundfoxStudios.DiscordBot
     {
       public bool IsEnabled { get; set; }
       public string CronExpression { get; set; }
+    }
+
+    public class YouTubeNotificationsModuleConfiguration : IEnableableModuleConfiguration
+    {
+      public bool IsEnabled { get; set; }
+      public string CronExpression { get; set; }
+      public ulong AnnouncementChannelId { get; set; }
+      public ulong AnnouncementRoleId { get; set; }
     }
   }
 }

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BoundfoxStudios.Data.Services;
 using BoundfoxStudios.DiscordBot.Extensions;
-using BoundfoxStudios.DiscordBot.Services;
+using BoundfoxStudios.DiscordBot.Utils;
 using Cronos;
 using Discord;
 using Discord.WebSocket;
@@ -14,36 +14,38 @@ using Microsoft.Extensions.Options;
 
 namespace BoundfoxStudios.DiscordBot.BackgroundServices
 {
-  public class StatisticsBackgroundService : BackgroundService
+  public class YouTubeNotificationsBackgroundService : BackgroundService
   {
-    private readonly ILogger<StatisticsBackgroundService> _logger;
+    private readonly ILogger<YouTubeNotificationsBackgroundService> _logger;
+    private readonly IOptionsMonitor<DiscordBotOptions> _optionsMonitor;
     private readonly IServiceProvider _serviceProvider;
     private readonly IDisposable _onChangeHandler;
     private bool IsEnabled { get; set; }
     private CronExpression _cronExpression;
 
-    public StatisticsBackgroundService(
-      ILogger<StatisticsBackgroundService> logger,
+    public YouTubeNotificationsBackgroundService(
+      ILogger<YouTubeNotificationsBackgroundService> logger,
       IOptionsMonitor<DiscordBotOptions> optionsMonitor,
       IServiceProvider serviceProvider
     )
     {
       _logger = logger;
+      _optionsMonitor = optionsMonitor;
       _serviceProvider = serviceProvider;
 
       _onChangeHandler = optionsMonitor.OnChange(options =>
       {
-        IsEnabled = options.Modules.Statistics.IsEnabled;
-        _cronExpression = LoadCronExpression(options.Modules.Statistics);
+        IsEnabled = options.Modules.YouTubeNotifications.IsEnabled;
+        _cronExpression = LoadCronExpression(options.Modules.YouTubeNotifications);
         _logger.LogInformation("Setting new enabled state: {0}", IsEnabled);
       });
 
-      _cronExpression = LoadCronExpression(optionsMonitor.CurrentValue.Modules.Statistics);
-      IsEnabled = optionsMonitor.CurrentValue.Modules.Statistics.IsEnabled;
+      _cronExpression = LoadCronExpression(optionsMonitor.CurrentValue.Modules.YouTubeNotifications);
+      IsEnabled = optionsMonitor.CurrentValue.Modules.YouTubeNotifications.IsEnabled;
       _logger.LogInformation("Setting new enabled state: {0}", IsEnabled);
     }
 
-    private CronExpression LoadCronExpression(ModuleConfiguration.StatisticsModuleConfiguration configuration)
+    private CronExpression LoadCronExpression(ModuleConfiguration.YouTubeNotificationsModuleConfiguration configuration)
     {
       return CronExpression.Parse(configuration.CronExpression);
     }
@@ -78,19 +80,21 @@ namespace BoundfoxStudios.DiscordBot.BackgroundServices
           using (var scope = _serviceProvider.CreateScope())
           {
             var discordClient = scope.ServiceProvider.GetRequiredService<DiscordSocketClient>();
-            var statisticsService = scope.ServiceProvider.GetRequiredService<StatisticsService>();
-            var channelLogger = scope.ServiceProvider.GetRequiredService<ChannelLogger>();
+            var youTubeNotificationsService = scope.ServiceProvider.GetRequiredService<YouTubeNotificationsService>();
 
-            foreach (var guild in discordClient.Guilds)
+            var notificationsToSend = await youTubeNotificationsService.GetUnsentNotifications();
+            var options = _optionsMonitor.CurrentValue.Modules.YouTubeNotifications;
+            var channel = (IMessageChannel) discordClient.GetChannel(options.AnnouncementChannelId);
+
+            foreach (var notification in notificationsToSend)
             {
-              await statisticsService.WriteMemberCountAsync(guild.Id, guild.MemberCount);
-            }
+              var message = $"Hey {MentionUtils.MentionRole(options.AnnouncementRoleId)} @here!\n\n" +
+                            $"{TextUtils.Bold(notification.Author)} has uploaded a new video: {TextUtils.Bold(notification.Title)}\n\n" +
+                            $"Check it out here: {notification.Url}";
 
-            await channelLogger.LogAsync(new EmbedBuilder()
-              .WithBoundfoxStudiosColor()
-              .WithCurrentTimestamp()
-              .WithBoldDescription("Wrote statistics.")
-            );
+              await channel.SendMessageAsync(message);
+              await youTubeNotificationsService.UpdateStatusToSent(notification);
+            }
           }
         }
       }
@@ -107,7 +111,7 @@ namespace BoundfoxStudios.DiscordBot.BackgroundServices
       base.Dispose();
     }
 
-    ~StatisticsBackgroundService()
+    ~YouTubeNotificationsBackgroundService()
     {
       Dispose();
     }

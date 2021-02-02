@@ -19,6 +19,7 @@
     <ItemGroup>
       <ProjectReference Include="..\BoundfoxStudios.Data\BoundfoxStudios.Data.csproj" />
       <ProjectReference Include="..\BoundfoxStudios.DiscordBot\BoundfoxStudios.DiscordBot.csproj" />
+      <ProjectReference Include="..\BoundfoxStudios.WebApi\BoundfoxStudios.WebApi.csproj" />
     </ItemGroup>
 
     <ItemGroup>

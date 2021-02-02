@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoundfoxStudios.Data", "Bou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoundfoxStudios.Data.Tests", "BoundfoxStudios.Data.Tests\BoundfoxStudios.Data.Tests.csproj", "{6C5030BF-5FE6-4808-A311-D06B8A20C128}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoundfoxStudios.WebApi", "BoundfoxStudios.WebApi\BoundfoxStudios.WebApi.csproj", "{EE8AF698-8F1F-4556-96A9-12FE8AFE0FA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,5 +42,9 @@ Global
 		{6C5030BF-5FE6-4808-A311-D06B8A20C128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C5030BF-5FE6-4808-A311-D06B8A20C128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C5030BF-5FE6-4808-A311-D06B8A20C128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE8AF698-8F1F-4556-96A9-12FE8AFE0FA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE8AF698-8F1F-4556-96A9-12FE8AFE0FA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE8AF698-8F1F-4556-96A9-12FE8AFE0FA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE8AF698-8F1F-4556-96A9-12FE8AFE0FA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

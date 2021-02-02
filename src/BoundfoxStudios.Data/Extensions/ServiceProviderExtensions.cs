@@ -1,3 +1,4 @@
+using BoundfoxStudios.Data.BackgroundServices;
 using BoundfoxStudios.Data.Database;
 using BoundfoxStudios.Data.Services;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,12 @@ namespace BoundfoxStudios.Data.Extensions
       services.AddTransient<LinksService>();
       services.AddTransient<UserReminderService>();
       services.AddTransient<StatisticsService>();
+      services.AddTransient<YouTubeNotificationsService>();
+      services.AddTransient<YouTubeSyndicationReader>();
+      
+      services.AddHttpClient<YouTubeNotificationsService>();
+      
+      services.AddHostedService<YouTubeNotificationsBackgroundService>();
     }
   }
 }
