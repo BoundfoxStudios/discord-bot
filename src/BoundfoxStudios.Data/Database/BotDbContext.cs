@@ -14,6 +14,7 @@ namespace BoundfoxStudios.Data.Database
     public DbSet<LinkModel> Links { get; set; }
     public DbSet<UserReminderModel> UserReminders { get; set; }
     public DbSet<MemberCountModel> MemberCounts { get; set; }
+    public DbSet<YouTubeNotification> YouTubeNotifications { get; set; }
 
     public BotDbContext(DbContextOptions<BotDbContext> options)
       : base(options) { }

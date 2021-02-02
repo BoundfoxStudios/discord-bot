@@ -35,8 +35,6 @@ namespace BoundfoxStudios.Host
         app.UseDeveloperExceptionPage();
       }
 
-      app.UseHttpsRedirection();
-
       app.UseRouting();
 
       app.UseAuthorization();

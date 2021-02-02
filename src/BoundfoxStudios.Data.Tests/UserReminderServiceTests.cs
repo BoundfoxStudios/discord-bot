@@ -21,7 +21,7 @@ namespace BoundfoxStudios.Data.Tests
     [InlineData(7, null, 0, ThirdReminder - 1, 2)] // got a second reminder, is close to third reminder, but wont get it yet
     [InlineData(8, null, 1, ThirdReminder, 2)] // got a second reminder, hits the third reminder, will get a reminder
     [InlineData(9, null, 0, ThirdReminder + 1, 3)] // got a third reminder, is overdue, but does not get a reminder (will not be in the database anymore)
-    public async Task Bla(int index, int? joinedAtSeconds, int expected, int? lastNotificationSentAtInSeconds, int? numberOfNotificationsSent)
+    public async Task UserReminderTest(int index, int? joinedAtSeconds, int expected, int? lastNotificationSentAtInSeconds, int? numberOfNotificationsSent)
     {
       await using (var context = await CreateContextAsync())
       {
