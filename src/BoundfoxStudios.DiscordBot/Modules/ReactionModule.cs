@@ -110,7 +110,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
               if (guildUser == null)
               {
-                Logger.LogWarning("GuildUser ({Id} {Username}) is null. Something's strange!", user.Id, user.Username);
+                // Can happen, if a user reacted but left the server
                 continue;
               }
 
@@ -134,8 +134,6 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     private async Task ClientOnGuildMembersDownloaded(SocketGuild guild)
     {
-      await guild.DownloadUsersAsync();
-      
 #pragma warning disable 4014
       SyncReactionsAsync(guild);
 #pragma warning restore 4014

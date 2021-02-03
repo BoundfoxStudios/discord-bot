@@ -2,7 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - develop
 
 jobs:
   deploy:
@@ -26,6 +28,7 @@ jobs:
         working-directory: src/BoundfoxStudios.Host/.deploy
 
       - name: Deploy to Boundfox Studios Root Server
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: easingthemes/ssh-deploy@v2.1.2
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
