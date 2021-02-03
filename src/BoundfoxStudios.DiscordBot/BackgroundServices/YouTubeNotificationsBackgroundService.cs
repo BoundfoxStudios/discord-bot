@@ -75,7 +75,7 @@ namespace BoundfoxStudios.DiscordBot.BackgroundServices
             continue;
           }
 
-          _logger.LogInformation("Writing statistics...");
+          _logger.LogInformation("Checking YouTube notifications...");
 
           using (var scope = _serviceProvider.CreateScope())
           {
