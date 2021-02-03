@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BoundfoxStudios.DiscordBot.Services;
@@ -36,7 +37,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
       Client.ReactionAdded += ReactionAddedAsync;
       Client.ReactionRemoved += ReactionRemovedAsync;
 
-      Client.GuildAvailable += DiscordClientGuildAvailable;
+      Client.GuildMembersDownloaded += ClientOnGuildMembersDownloaded;
     }
 
     protected override void Disable()
@@ -44,7 +45,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
       Client.ReactionAdded -= ReactionAddedAsync;
       Client.ReactionRemoved -= ReactionRemovedAsync;
 
-      Client.GuildAvailable -= DiscordClientGuildAvailable;
+      Client.GuildMembersDownloaded -= ClientOnGuildMembersDownloaded;
     }
 
     protected override IEnableableModuleConfiguration IsEnabledAccessor(DiscordBotOptions options)
@@ -76,36 +77,62 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
     private async Task SyncReactionsAsync(IGuild guild)
     {
-      Logger.LogInformation("Reaction sync started for guild {Guild}", guild.Name);
-
-      var configurations = _options.CurrentValue.Modules.Reactions.Items;
-
-      foreach (var configuration in configurations)
+      using (Logger.BeginScope("Reaction syncing {Guild}", guild.Name))
       {
-        var channel = await guild.GetTextChannelAsync(configuration.ChannelId);
-        var message = await channel.GetMessageAsync(configuration.MessageId);
-        var users = await message.GetReactionUsersAsync(new Emoji(configuration.Emoji), int.MaxValue).FlattenAsync();
-        var role = guild.GetRole(configuration.RoleId);
+        Logger.LogInformation("Starting");
+        
+        var configurations = _options.CurrentValue.Modules.Reactions.Items;
 
-        foreach (var user in users)
+        foreach (var configuration in configurations)
         {
-          var guildUser = await guild.GetUserAsync(user.Id);
-
-          if (guildUser.RoleIds.Contains(role.Id))
+          using (Logger.BeginScope("Configuration {ChannelId} {Emoji}", configuration.ChannelId, configuration.Emoji))
           {
-            continue;
+            Logger.LogInformation("Starting");
+            
+            var channel = await guild.GetTextChannelAsync(configuration.ChannelId);
+            var message = await channel.GetMessageAsync(configuration.MessageId);
+            var users = (await message.GetReactionUsersAsync(new Emoji(configuration.Emoji), int.MaxValue).FlattenAsync()).ToArray();
+            var role = guild.GetRole(configuration.RoleId);
+
+            var userCount = users.Length;
+
+            for (var i = 0; i < userCount; i++)
+            {
+              var percentageDone = (int) Math.Floor((float) i / userCount * 100);
+
+              if (percentageDone > 0 && percentageDone % 5 == 0)
+              {
+                 Logger.LogInformation("{Percentage} % done", percentageDone);
+              }
+
+              var user = users[i];
+              var guildUser = await guild.GetUserAsync(user.Id);
+
+              if (guildUser == null)
+              {
+                Logger.LogWarning("GuildUser is null. Something's strange!");
+                continue;
+              }
+
+              if (guildUser.RoleIds.Contains(role.Id))
+              {
+                continue;
+              }
+
+              Logger.LogInformation("Adding role {Role} ({RoleId}) to user {User} ({UserId})", role.Name, role.Id, guildUser.Username, guildUser.Id);
+              await guildUser.AddRoleAsync(role);
+              await Task.Delay(_options.CurrentValue.Modules.Reactions.ReactionSyncDelay);
+            }
+
+            Logger.LogInformation("Done");
           }
-
-          Logger.LogInformation("Adding role {Role} ({RoleId}) to user {User} ({UserId})", role.Name, role.Id, guildUser.Username, guildUser.Id);
-          await guildUser.AddRoleAsync(role);
-          await Task.Delay(_options.CurrentValue.Modules.Reactions.ReactionSyncDelay);
         }
-      }
 
-      Logger.LogInformation("Reaction sync done for guild {Guild}", guild.Name);
+        Logger.LogInformation("Done");
+      }
     }
 
-    private Task DiscordClientGuildAvailable(SocketGuild guild)
+    private Task ClientOnGuildMembersDownloaded(SocketGuild guild)
     {
 #pragma warning disable 4014
       SyncReactionsAsync(guild);
