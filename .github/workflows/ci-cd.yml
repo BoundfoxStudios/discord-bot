@@ -20,7 +20,7 @@ jobs:
           dotnet-version: '5.0.100'
 
       - name: Publish
-        run: dotnet publish -c Release -r linux-x64 -o .deploy 
+        run: dotnet publish -c Release -r linux-x64 -o .deploy -p:PublishSingleFile=true --self-contained true
         working-directory: src/BoundfoxStudios.Host
         
       - name: Permissions
