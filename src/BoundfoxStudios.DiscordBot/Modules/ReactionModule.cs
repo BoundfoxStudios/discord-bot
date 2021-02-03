@@ -110,7 +110,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
               if (guildUser == null)
               {
-                Logger.LogWarning("GuildUser ({Id}) is null. Something's strange!", user.Id);
+                Logger.LogWarning("GuildUser ({Id} {Username}) is null. Something's strange!", user.Id, user.Username);
                 continue;
               }
 
@@ -132,13 +132,13 @@ namespace BoundfoxStudios.DiscordBot.Modules
       }
     }
 
-    private Task ClientOnGuildMembersDownloaded(SocketGuild guild)
+    private async Task ClientOnGuildMembersDownloaded(SocketGuild guild)
     {
+      await guild.DownloadUsersAsync();
+      
 #pragma warning disable 4014
       SyncReactionsAsync(guild);
 #pragma warning restore 4014
-
-      return Task.CompletedTask;
     }
   }
 }
