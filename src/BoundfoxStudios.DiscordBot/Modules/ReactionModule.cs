@@ -110,7 +110,7 @@ namespace BoundfoxStudios.DiscordBot.Modules
 
               if (guildUser == null)
               {
-                Logger.LogWarning("GuildUser is null. Something's strange!");
+                Logger.LogWarning("GuildUser ({Id}) is null. Something's strange!", user.Id);
                 continue;
               }
 
