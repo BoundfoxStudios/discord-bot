@@ -17,6 +17,7 @@ namespace BoundfoxStudios.Data.Services
   public class YouTubeNotificationsService
   {
     private const string SubscribeUrl = "https://pubsubhubbub.appspot.com/subscribe";
+    private readonly DateTime _wed32021 = new DateTime(2021, 2, 3, 0, 0, 0);
 
     private readonly ILogger<YouTubeNotificationsService> _logger;
     private readonly HttpClient _httpClient;
@@ -96,6 +97,11 @@ namespace BoundfoxStudios.Data.Services
 
       foreach (var item in items)
       {
+        if (item.PublishDateTime < _wed32021) // not post old videos again if we change something
+        {
+          continue;
+        }
+        
         try
         {
           await _context.YouTubeNotifications.AddAsync(item);
