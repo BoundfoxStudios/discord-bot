@@ -1,7 +1,7 @@
 using System;
 using Cronos;
 
-namespace BoundfoxStudios.DiscordBot.Extensions
+namespace BoundfoxStudios.Data.Extensions
 {
   public static class CronExpressionExtensions
   {

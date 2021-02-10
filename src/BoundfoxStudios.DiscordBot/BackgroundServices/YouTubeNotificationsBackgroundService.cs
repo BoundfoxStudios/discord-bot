@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BoundfoxStudios.Data.Extensions;
 using BoundfoxStudios.Data.Services;
 using BoundfoxStudios.DiscordBot.Extensions;
 using BoundfoxStudios.DiscordBot.Utils;
