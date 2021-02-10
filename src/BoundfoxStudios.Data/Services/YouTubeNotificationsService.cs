@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
-using System.Web;
-using System.Xml;
 using BoundfoxStudios.Data.Database;
 using BoundfoxStudios.Data.Database.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +14,7 @@ namespace BoundfoxStudios.Data.Services
   public class YouTubeNotificationsService
   {
     private const string SubscribeUrl = "https://pubsubhubbub.appspot.com/subscribe";
-    private readonly DateTime _wed32021 = new DateTime(2021, 2, 3, 0, 0, 0);
+    private readonly DateTime _wed32021 = new(2021, 2, 3, 0, 0, 0);
 
     private readonly ILogger<YouTubeNotificationsService> _logger;
     private readonly HttpClient _httpClient;

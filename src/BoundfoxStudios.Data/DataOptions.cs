@@ -27,6 +27,7 @@ namespace BoundfoxStudios.Data
 
     public class YouTubeNotificationsConfiguration
     {
+      public string ResubscribeIntervalCronExpression { get; set; }
       public string CallbackUrl { get; set; }
       public IReadOnlyCollection<YouTubeConfiguration> Channels { get; set; }
     }
