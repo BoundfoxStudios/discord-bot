@@ -29,5 +29,15 @@ namespace BoundfoxStudios.DiscordBot.Commands
         .AddField("English", $"Windows: Press {TextUtils.Bold("Win+Shift+S")} to make a screenshot.")
         .Build()
     );
+
+    [Command("upload", true)]
+    public async Task UploadAsync() => await ReplyAsync(
+      embed: new EmbedBuilder()
+        .AsBoundfoxStudiosDefaultMessage()
+        .WithDescription("How to upload a Unity project?\r\n[Unity Project Packer Download](https://github.com/BoundfoxStudios/unity-project-packer/releases/tag/latest)")
+        .AddField("Deutsch", $"Gehe auf den Link und lade die .exe-Datei herunter. Lege diese dann im Hauptverzeichnis von Deinem Unity-Projekt ab und starte sie.")
+        .AddField("English", $"Open the URL and download the .exe file. Place it into your Unity project and run it.")
+        .Build()
+    );
   }
 }
