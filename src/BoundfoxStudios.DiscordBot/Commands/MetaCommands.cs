@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using BoundfoxStudios.DiscordBot.Extensions;
+using BoundfoxStudios.DiscordBot.Utils;
 using Discord;
 using Discord.Commands;
 using JetBrains.Annotations;
@@ -18,5 +19,15 @@ namespace BoundfoxStudios.DiscordBot.Commands
         .AddField("Socials (YT, FB, Twitter, ...)", "https://boundfoxstudios.com/socials")
         .AddField("Patreon", "https://www.patreon.com/boundfoxstudios")
         .Build());
+
+    [Command("screenshot", true)]
+    public async Task ScreenshotAsync() => await ReplyAsync(
+      embed: new EmbedBuilder()
+        .AsBoundfoxStudiosDefaultMessage()
+        .WithDescription("How to do screenshots?")
+        .AddField("Deutsch", $"Windows: Drücke {TextUtils.Bold("Win+Shift+S")} um einen Screenshot machen.")
+        .AddField("English", $"Windows: Press {TextUtils.Bold("Win+Shift+S")} to make a screenshot.")
+        .Build()
+    );
   }
 }
