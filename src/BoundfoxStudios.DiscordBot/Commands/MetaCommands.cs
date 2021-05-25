@@ -39,5 +39,8 @@ namespace BoundfoxStudios.DiscordBot.Commands
         .AddField("English", $"Open the URL and download the .exe file. Place it into your Unity project and run it.")
         .Build()
     );
+
+    [Command("10k", true)]
+    public async Task TenKSpecial() => await ReplyAsync($"Vielen Dank, liebe(r) {MentionUtils.MentionUser(Context.User.Id)}! {Emote.Parse("<:bfs_baguette:810747643733999678>")}");
   }
 }
