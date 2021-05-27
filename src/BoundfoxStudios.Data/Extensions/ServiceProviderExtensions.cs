@@ -19,7 +19,6 @@ namespace BoundfoxStudios.Data.Extensions
       services.AddTransient<DatabaseMigrator>();
       services.AddTransient<DatabaseSeeder>();
       services.AddTransient<LinksService>();
-      services.AddTransient<UserReminderService>();
       services.AddTransient<StatisticsService>();
       services.AddTransient<YouTubeNotificationsService>();
       services.AddTransient<YouTubeSyndicationReader>();

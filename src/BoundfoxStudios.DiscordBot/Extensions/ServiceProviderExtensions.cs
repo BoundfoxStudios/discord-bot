@@ -19,7 +19,6 @@ namespace BoundfoxStudios.DiscordBot.Extensions
     {
       services.AddOptions<DiscordBotOptions>().Bind(configureSection);
       services.AddHostedService<DiscordBotHost>();
-      services.AddHostedService<UserReminderBackgroundService>();
       services.AddHostedService<StatisticsBackgroundService>();
       services.AddHostedService<YouTubeNotificationsBackgroundService>();
 
