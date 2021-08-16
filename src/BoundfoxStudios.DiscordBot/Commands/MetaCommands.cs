@@ -25,8 +25,10 @@ namespace BoundfoxStudios.DiscordBot.Commands
       embed: new EmbedBuilder()
         .AsBoundfoxStudiosDefaultMessage()
         .WithDescription("How to do screenshots?")
-        .AddField("Deutsch", $"Windows: Drücke {TextUtils.Bold("Win+Shift+S")} um einen Screenshot machen.")
-        .AddField("English", $"Windows: Press {TextUtils.Bold("Win+Shift+S")} to make a screenshot.")
+        .AddField("Deutsch", $"Windows: Drücke {TextUtils.Bold("Win+Shift+S")} um einen Screenshot zu machen."
+        $"Blender: Gehe ins Top-Menü {TextUtils.Bold("Fenster+Bildschirmfoto speichern")} um einen Screenshot zu machen.")
+        .AddField("English", $"Windows: Press {TextUtils.Bold("Win+Shift+S")} to make a screenshot."
+        $"Blender: Go to the top-bar-menu {TextUtils.Bold("Window+Save Screenshot")} to make a screenshot")
         .Build()
     );
 
