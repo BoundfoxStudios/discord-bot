@@ -2,6 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using BoundfoxStudios.Data.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace BoundfoxStudios.WebApi.Controllers
 {
@@ -9,15 +10,18 @@ namespace BoundfoxStudios.WebApi.Controllers
   [ApiController]
   public class YouTubeWebHookController : ControllerBase
   {
+    private readonly ILogger<YouTubeWebHookController> _logger;
     private readonly YouTubeNotificationsService _youTubeNotificationsService;
 
-    public YouTubeWebHookController(YouTubeNotificationsService youTubeNotificationsService)
+    public YouTubeWebHookController(ILogger<YouTubeWebHookController> logger, YouTubeNotificationsService youTubeNotificationsService)
     {
+      _logger = logger;
       _youTubeNotificationsService = youTubeNotificationsService;
     }
     
     public IActionResult ScheduleAsync([FromQuery(Name = "hub.challenge")] string challenge)
     {
+      _logger.LogInformation("Accepting challenge");
       return Ok(challenge); 
     }
     
