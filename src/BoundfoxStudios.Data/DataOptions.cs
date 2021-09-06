@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace BoundfoxStudios.Data
@@ -35,6 +34,7 @@ namespace BoundfoxStudios.Data
       public string TitleId { get; set; }
       public string DeveloperSecretKey { get; set; }
       public string SetLeaderboardAggregationMethodCronExpression { get; set; }
+      public IReadOnlyCollection<string> ExcludeFromAggregationMethodChange { get; set; }
     }
   }
 }

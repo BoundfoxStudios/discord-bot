@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PlayFab;
 using PlayFab.AdminModels;
 
@@ -9,13 +11,16 @@ namespace BoundfoxStudios.Data.BugABall
   public class HighscoreService
   {
     private readonly ILogger<HighscoreService> _logger;
+    private readonly IOptionsMonitor<DataOptions> _optionsMonitor;
     private readonly PlayFabAdminInstanceAPI _playFab;
 
     public HighscoreService(
       ILogger<HighscoreService> logger,
+      IOptionsMonitor<DataOptions> optionsMonitor,
       PlayFabAdminInstanceAPI playFab)
     {
       _logger = logger;
+      _optionsMonitor = optionsMonitor;
       _playFab = playFab;
     }
 
@@ -39,7 +44,9 @@ namespace BoundfoxStudios.Data.BugABall
 
     private async Task ChangeAggregationMethodAsync(PlayerStatisticDefinition definition)
     {
-      if (definition.AggregationMethod == StatisticAggregationMethod.Max)
+      if (definition.AggregationMethod == StatisticAggregationMethod.Max ||
+          _optionsMonitor.CurrentValue.BugABall.ExcludeFromAggregationMethodChange.Any(exclude =>
+            string.Equals(definition.StatisticName, exclude, StringComparison.InvariantCultureIgnoreCase)))
       {
         return;
       }
